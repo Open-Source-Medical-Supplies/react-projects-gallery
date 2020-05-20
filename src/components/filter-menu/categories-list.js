@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CheckboxItem from './checkbox-item';
 import IconItem from './icon-item';
 
 const CategoriesList = ({ list }) => {

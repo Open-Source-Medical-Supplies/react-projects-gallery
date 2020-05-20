@@ -5,7 +5,7 @@ import { Tree } from 'primereact/tree';
 
 const mockList = [
   {
-    key: 'Categories',    // marked optional in types, but required for checkboxes
+    key: 'Categories',    // marked optional in types, but required for checkboxes else returns 'undefined'
     label: 'Categories',
     icon: 'tags',         // must be pi-icons
     children: [
@@ -66,8 +66,10 @@ const FilterMenu = (props) => {
         value={treeState.nodes}
         selectionMode='checkbox'
         selectionKeys={treeState.selection}
-        onSelectionChange={setSelection}>
-      </Tree>
+        onSelectionChange={setSelection}
+        filter={true}
+        filterPlaceholder='Filter'
+        ></Tree>
     </div>
   );
 };

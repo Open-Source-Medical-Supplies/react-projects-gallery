@@ -8,6 +8,7 @@
   // be sure to add a height attr to the element;
   object-fit: scale-down;
   object-position: center;
+  width: 100%;
 }
 
 .card-selected {
@@ -17,10 +18,28 @@
 .close-button {
   padding: 0.5rem;
   background: $primary;
-  color: white;
   border-radius: 4px;
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  z-index: 10000;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.5;
+  }
+  span {
+    color: white;
+  }
 }
 
 .clamp-1 {
   @include clamp-n(1);
+}
+
+.p-sidebar-right {
+  position: sticky;
+  height: 100vh;
+  width: calc(100% - 0.5rem) !important;
+  margin-left: 0.5rem !important;
 }

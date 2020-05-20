@@ -13,7 +13,7 @@ const FullCard = ({card}) => {
   )
 
   const desc = (
-    <section>
+    <section alt='description'>
       <p>
         {description}
       </p>
@@ -22,12 +22,12 @@ const FullCard = ({card}) => {
 
   const externalLinks = externalLink?.split(';') || [];
   const source = (
-    <section>
+    <section alt='Sources' >
       <h3>Source</h3>
       {
         externalLinks.map(link => ( 
           // eslint-disable-next-line react/jsx-no-target-blank
-          <a href={link} target='_blank' rel={OpenExternalSafely}>
+          <a key={link.slice(0,-10)} href={link} target='_blank' rel={OpenExternalSafely}>
             <span className='clamp-1'>{link}</span>
           </a>
         ))
@@ -36,7 +36,7 @@ const FullCard = ({card}) => {
   );
 
   const attribution = (
-    <section>
+    <section alt='Attribution Organization'>
       <h3>Attribution Organization</h3>
       <p>
         {attributionOrg}
@@ -45,7 +45,7 @@ const FullCard = ({card}) => {
   )
 
   const creatorAttr = !!creator ? (
-    <section>
+    <section alt='Creator'>
       <h3>Creator</h3>
       <p>
         {creator}
@@ -57,7 +57,7 @@ const FullCard = ({card}) => {
   // icon='pi pi-download'
 
   const footer = (
-    <span className="full-card__footer">
+    <span alt='footer' className="full-card__footer">
       <Button
         onClick={openExternal(externalLinks[0])}
         tooltip='Link will open in a new tab'

@@ -177,11 +177,11 @@ export default class DetailWindow extends Component {
       <button
         type="button"
         ref={(el) => (this.closeIcon = el)}
-        className="p-sidebar-close p-link"
+        className="p-sidebar-close p-link close-button"
         onClick={this.onCloseClick}
         aria-label={this.props.ariaCloseLabel}
       >
-        <span className="p-sidebar-close-icon pi pi-times close-button" />
+        <span className="p-sidebar-close-icon pi pi-times" />
       </button>
     );
   }

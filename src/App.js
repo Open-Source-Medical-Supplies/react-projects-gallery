@@ -25,7 +25,7 @@ const App = () => {
 
   return (
     <div style={{display: 'flex'}}>
-      <div style={{display: 'flex', flex: 1}}>
+      <div style={{display: 'flex', flex: 1, marginRight: '0.5rem'}}>
         <FilterMenu />
       </div>
       <div style={{display: 'flex', flex: cardState.visible ? 2 : 4}}>
