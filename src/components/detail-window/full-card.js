@@ -3,10 +3,10 @@ import React from 'react';
 import { MapCardToJSON } from '../../service/mapCardToJSON';
 import { OpenExternalSafely, openExternal } from '../../shared/utilities';
 
-const FullCard = ({card}) => {
+const FullCard = ({selectedCard}) => {
   const {
     name, displayName, reviewStatus, imageURL, description, externalLink, attributionOrg, creator
-  } = MapCardToJSON(card);
+  } = MapCardToJSON(selectedCard);
   
   const headerImage = (
     <img className='centered-image' alt={name} src={imageURL} style={{ height: '250px' }}/>

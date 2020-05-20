@@ -4,13 +4,13 @@ import {Button} from 'primereact/button';
 import classNames from "classnames";
 import { MapCardToJSON } from '../../service/mapCardToJSON';
 
-const ProjectCard = ({data, setCard, selected}) =>{
+const ProjectCard = ({data, setCard, selectedCard}) =>{
   const {
     name, displayName, reviewStatus, imageURL
   } = MapCardToJSON(data);
 
   const selectCard = () => {
-    setCard({data, visible: true});
+    setCard({selectedCard: data, visible: true});
   }
 
   if (typeof data.HeaderImageURL !== 'string') {
@@ -32,7 +32,7 @@ const ProjectCard = ({data, setCard, selected}) =>{
     </span>
   );
   
-  const selectedName = selected['Full Project Name'];
+  const selectedName = selectedCard['Full Project Name'];
 
   const highlight = classNames({
     "card-selected": !!selectedName && selectedName === name

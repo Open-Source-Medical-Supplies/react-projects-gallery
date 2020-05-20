@@ -2,38 +2,56 @@ import "primeflex/primeflex.css";
 import 'primeicons/primeicons.css';
 import 'primereact/resources/primereact.min.css';
 import 'primereact/resources/themes/nova-light/theme.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CardContainer from './components/card-container/card-container';
 import DetailWindow from './components/detail-window/detail-window';
 import FullCard from "./components/detail-window/full-card";
 import FilterMenu from "./components/filter-menu/filter-menu";
 import './shared/css/_prime.scss';
 import initFabLib from './shared/font-awesome-lib';
+import { getRows } from "./service/airtable";
 
-const CardStateDefault = {
-  data: {},
+const StateDefault = {
+  records: [],
+  selectedCard: {},
   visible: false
 };
 
 const App = () => {
   initFabLib();
 
-  let [cardState, setCard] = useState(CardStateDefault);
-  setCard = setCard.bind(this);
+  let [state, baseSetState] = useState(StateDefault);
+  const setState = (props) => baseSetState({...state, ...props});
 
-  const hide = () => setCard(CardStateDefault);
+  const hide = () => setState({...StateDefault, records: state.records});
 
+  useEffect(() => {
+    (async function fetch() {
+      const sr = await getRows();
+      sr.eachPage(
+        (records, fetchNextPage) => {
+          setState({records});  
+        },
+        (err) => {
+          if (err) { console.error(err); return; }
+        }
+      );
+    })();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // disabling it b/c this should only run once and not based on changes.
+
+  
   return (
     <div style={{display: 'flex'}}>
       <div style={{display: 'flex', flex: 1, marginRight: '0.5rem'}}>
         <FilterMenu />
       </div>
-      <div style={{display: 'flex', flex: cardState.visible ? 2 : 4}}>
-        <CardContainer cardChange={setCard} selectedCard={cardState.data} />
+      <div style={{display: 'flex', flex: state.visible ? 2 : 4}}>
+        <CardContainer records={state.records} cardChange={setState} selectedCard={state.selectedCard} />
       </div>
-      <div style={{display: 'flex', flex: cardState.visible ? 2 : 0}}>
-        <DetailWindow visible={cardState.visible} onHide={hide} className='p-sidebar-md'>
-          <FullCard card={cardState.data} />
+      <div style={{display: 'flex', flex: state.visible ? 2 : 0}}>
+        <DetailWindow visible={state.visible} onHide={hide} className='p-sidebar-md'>
+          <FullCard selectedCard={state.selectedCard} />
         </DetailWindow>
       </div>
     </div>
