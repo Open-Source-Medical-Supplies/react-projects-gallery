@@ -1,0 +1,6 @@
+@mixin clamp-n($n) {
+  display: -webkit-box;
+  -webkit-line-clamp: $n;
+  -webkit-box-orient: vertical; 
+  overflow: hidden;
+}

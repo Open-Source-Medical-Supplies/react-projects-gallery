@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { shallowRows } from '../service/airtable';
+import { shallowRows } from '../../service/airtable';
 import ProjectCard from './card';
 
 const CardContainer = ({cardChange, selectedCard}) => {

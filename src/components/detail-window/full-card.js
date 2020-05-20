@@ -1,7 +1,7 @@
 import { Button } from 'primereact/button';
 import React from 'react';
 import { MapCardToJSON } from '../../service/mapCardToJSON';
-import { OpenExternalSafely } from '../../shared/utilities';
+import { OpenExternalSafely, openExternal } from '../../shared/utilities';
 
 const FullCard = ({card}) => {
   const {
@@ -20,12 +20,18 @@ const FullCard = ({card}) => {
     </section>
   );
 
+  const externalLinks = externalLink?.split(';') || [];
   const source = (
     <section>
       <h3>Source</h3>
-      {/* eslint-disable-next-line react/jsx-no-target-blank */}
-      <a href={externalLink} target='_blank' rel={OpenExternalSafely}>{externalLink}</a>
-
+      {
+        externalLinks.map(link => ( 
+          // eslint-disable-next-line react/jsx-no-target-blank
+          <a href={link} target='_blank' rel={OpenExternalSafely}>
+            <span className='clamp-1'>{link}</span>
+          </a>
+        ))
+      }
     </section>
   );
 
@@ -47,14 +53,13 @@ const FullCard = ({card}) => {
     </section>
   ) : null;
 
-  console.log('todo: full-card icon ternary logic')
+  console.log('todo: full-card icon + link/download ternary logic')
   // icon='pi pi-download'
 
-  const openExternal = () => window.open(externalLink, OpenExternalSafely);
   const footer = (
     <span className="full-card__footer">
       <Button
-        onClick={openExternal}
+        onClick={openExternal(externalLinks[0])}
         tooltip='Link will open in a new tab'
         label='Make it!'
         icon='pi pi-external-link'

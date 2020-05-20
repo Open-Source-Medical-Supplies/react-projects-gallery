@@ -2,7 +2,7 @@ import React from 'react';
 import {Card} from 'primereact/card';
 import {Button} from 'primereact/button';
 import classNames from "classnames";
-import { MapCardToJSON } from '../service/mapCardToJSON';
+import { MapCardToJSON } from '../../service/mapCardToJSON';
 
 const ProjectCard = ({data, setCard, selected}) =>{
   const {
@@ -40,8 +40,8 @@ const ProjectCard = ({data, setCard, selected}) =>{
   return (
     <div key={name} className='p-col-4'>
       <Card header={headerImage} footer={footer} className={highlight}>
-        <h2> {name} </h2>
-        <h3> {displayName} </h3>
+        <h2 className='clamp-1'> {name} </h2>
+        <h3 className='clamp-1'> {displayName} </h3>
       </Card>
     </div>
   );
