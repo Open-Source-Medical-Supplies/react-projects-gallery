@@ -2,12 +2,13 @@ import "primeflex/primeflex.css";
 import 'primeicons/primeicons.css';
 import 'primereact/resources/primereact.min.css';
 import 'primereact/resources/themes/nova-light/theme.css';
-import './shared/css/_prime.scss';
 import React, { useState } from 'react';
 import CardContainer from './components/card-container/card-container';
 import DetailWindow from './components/detail-window/detail-window';
-import initFabLib from './shared/font-awesome-lib';
 import FullCard from "./components/detail-window/full-card";
+import FilterMenu from "./components/filter-menu/filter-menu";
+import './shared/css/_prime.scss';
+import initFabLib from './shared/font-awesome-lib';
 
 const CardStateDefault = {
   data: {},
@@ -25,7 +26,7 @@ const App = () => {
   return (
     <div style={{display: 'flex'}}>
       <div style={{display: 'flex', flex: 1}}>
-        {/* <FilterMenu /> */}
+        <FilterMenu />
       </div>
       <div style={{display: 'flex', flex: cardState.visible ? 2 : 4}}>
         <CardContainer cardChange={setCard} selectedCard={cardState.data} />

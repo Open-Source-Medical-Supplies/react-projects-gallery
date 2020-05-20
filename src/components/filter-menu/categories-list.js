@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CheckboxItem from './checkbox-item';
 import IconItem from './icon-item';
 
-const ExpansionList = ({ list }) => {
+const CategoriesList = ({ list }) => {
   const [state, setState] = useState({
     open: true,
     list,
@@ -43,4 +43,4 @@ const ExpansionList = ({ list }) => {
     </div>
   );
 };
-export default ExpansionList;
+export default CategoriesList;
