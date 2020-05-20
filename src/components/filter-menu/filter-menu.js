@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
 import ExpansionList from './expansion-list';
-import { List } from '@material-ui/core';
-
-const useStyles = makeStyles((theme) => createStyles({
-  root: {
-    maxWidth: '25%'
-  }
-}));
 
 const mockList = [
   {
@@ -39,7 +31,6 @@ const mockList = [
 ]
 
 const FilterMenu = (props) => {
-  const classes = useStyles();
   const [lists, setLists] = useState([])
 
   useEffect(() => {
@@ -50,11 +41,12 @@ const FilterMenu = (props) => {
   }, [])
 
   return (
-    <List component='nav' 
-      aria-labelledby="nested-list"
-      classes={classes.root}>
-      { lists.map(list => <ExpansionList key={list.label} list={list} />) }
-    </List>
+    <div></div>
+    // <div className={classes.root}>
+    //   <List component='nav' aria-labelledby="nested-list">
+    //     { lists.map(list => <ExpansionList key={list.label} list={list} />) }
+    //   </List>
+    // </div>
   );
 };
 

@@ -1,59 +1,49 @@
-import { GridListTile } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import React from 'react';
+import {Card} from 'primereact/card';
+import {Button} from 'primereact/button';
+import classNames from "classnames";
+import { MapCardToJSON } from '../service/mapCardToJSON';
 
-const useStyles = makeStyles({
-  root: {
-    maxWidth: 300,
-  },
-});
+const ProjectCard = ({data, setCard, selected}) =>{
+  const {
+    name, displayName, reviewStatus, imageURL
+  } = MapCardToJSON(data);
 
-export default function ProjectCard({data}) {
-  const classes = useStyles();
-  const name = data['Full Project Name'];
-  const displayName = data['Display Name'] ? data['Display Name'][0] : '';  // b/c it's a lookup field in AT?
-  const reviewStatus = data['Review Status'] ? data['Review Status'][0] : '';
-  const imageURL = data.HeaderImageURL !== '#ERROR!' ? data.HeaderImageURL : '';
+  const selectCard = () => {
+    setCard({data, visible: true});
+  }
 
   if (typeof data.HeaderImageURL !== 'string') {
     console.warn('no image url: ' + data['Base ID'])
   }
+
+  const headerImage = (
+    <img className='centered-image' alt={name} src={imageURL} style={{ height: '150px' }}/>
+  )
+  const footer = (
+    <span style={{display: 'flex', justifyContent: 'flex-end'}}>
+      <Button
+        onClick={selectCard}
+        label='View'
+        icon='pi
+        pi-eye'
+        iconPos='right'
+        className="p-button-raised p-button-rounded" />
+    </span>
+  );
+  
+  const selectedName = selected['Full Project Name'];
+
+  const highlight = classNames({
+    "card-selected": !!selectedName && selectedName === name
+  });
   return (
-    <GridListTile key={data['Base ID']} cols={2} rows={2}>
-      <Card className={classes.root}>
-        <CardActionArea>
-          {
-            imageURL.length ?
-            <CardMedia
-              component="img"
-              alt={name}
-              height="140"
-              image={imageURL}
-              title={name}
-            /> : null
-          }
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              {name}
-            </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-              {displayName}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-        <CardActions>
-          <Button size="small" color="primary">
-            View
-          </Button>
-        </CardActions>
+    <div key={name} className='p-col-4'>
+      <Card header={headerImage} footer={footer} className={highlight}>
+        <h2> {name} </h2>
+        <h3> {displayName} </h3>
       </Card>
-    </GridListTile>
+    </div>
   );
 }
+export default ProjectCard;

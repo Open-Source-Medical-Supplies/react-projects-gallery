@@ -1,0 +1,1 @@
+export const OpenExternalSafely = '_blank noopener noreferrer nofollow';

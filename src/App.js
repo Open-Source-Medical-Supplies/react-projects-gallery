@@ -1,22 +1,42 @@
-import React, { Component } from 'react';
+import "primeflex/primeflex.css";
+import 'primeicons/primeicons.css';
+import 'primereact/resources/primereact.min.css';
+import 'primereact/resources/themes/nova-light/theme.css';
+import './shared/prime.scss';
+import React, { useState } from 'react';
 import CardContainer from './components/card-container';
-import FilterMenu from './components/filter-menu/filter-menu';
+import DetailWindow from './components/detail-window/detail-window';
 import initFabLib from './shared/font-awesome-lib';
+import FullCard from "./components/detail-window/full-card";
 
-class App extends Component {
-  constructor() {
-    super();
-    initFabLib();
-  }
+const CardStateDefault = {
+  data: {},
+  visible: false
+};
 
-  render() {
-    return (
-      <div>
-        <FilterMenu />
-        <CardContainer />
+const App = () => {
+  initFabLib();
+
+  let [cardState, setCard] = useState(CardStateDefault);
+  setCard = setCard.bind(this);
+
+  const hide = () => setCard(CardStateDefault);
+
+  return (
+    <div style={{display: 'flex'}}>
+      {/* <FilterMenu /> */}
+      <div style={{display: 'flex', flex: 1}}>
+        </div>
+      <div style={{display: 'flex', flex: cardState.visible ? 2 : 4}}>
+        <CardContainer cardChange={setCard} selectedCard={cardState.data} />
       </div>
-    );
-  }
+      <div style={{display: 'flex', flex: cardState.visible ? 2 : 0}}>
+        <DetailWindow visible={cardState.visible} onHide={hide} className='p-sidebar-md'>
+          <FullCard card={cardState.data} />
+        </DetailWindow>
+      </div>
+    </div>
+  );
 }
 
 export default App;

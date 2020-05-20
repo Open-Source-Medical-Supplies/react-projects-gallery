@@ -1,26 +1,12 @@
 import React from 'react';
-import {
-  ListItem, 
-  makeStyles,
-  createStyles,
-} from "@material-ui/core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-const useStyles = makeStyles((theme) => createStyles({
-  root: {
-    display: 'flex',
-    flexDirection: 'column'
-  }
-}));
+import {Card} from 'primereact/card';
 
 export default function IconItem ({item}) {
-  const classes = useStyles();
-
   return (
-    // <ListItem button className={classes.root}>
-    <ListItem button>
+    <Card >
       <FontAwesomeIcon icon={item.icon} />
-      {item.label}
-    </ListItem>
+      {item.label} {/* display name from MedSupCat */}
+    </Card>
   );
 }
