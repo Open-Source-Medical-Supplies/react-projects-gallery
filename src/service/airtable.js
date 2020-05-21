@@ -10,3 +10,6 @@ export async function getRows() {
     // pageSize: 25
   });
 }
+export async function getFilterMenu() {
+  return base('ProjectsFilterMenu').select({view: "Grid view"});
+}

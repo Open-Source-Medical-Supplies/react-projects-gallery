@@ -2,37 +2,62 @@ import React, { useEffect, useState } from 'react';
 import CategoriesList from './categories-list';
 import classNames from "classnames";
 import { Tree } from 'primereact/tree';
+import { getFilterMenu } from '../../service/airtable';
+import { parseRecords } from './filter-menu.utilities';
 
-const mockList = [
+const mockCategories = [
   {
-    key: 'Categories',    // marked optional in types, but required for checkboxes else returns 'undefined'
-    label: 'Categories',
-    icon: 'tags',         // must be pi-icons
+    key: 'Bowling Balls',
+    label: 'Bowling Balls',
+    icon: 'bowling-ball'
+  },
+  {
+    key: 'Cold War Surplus',
+    label: 'Cold War Surplus',
+    icon: 'fighter-jet'
+  },
+  {
+    key: 'Lemons',
+    label: 'Lemons',
+    icon: 'lemon'
+  },
+  {
+    key: 'Quidditch Supplies',
+    label: 'Quidditch Supplies',
+    icon: 'quidditch'
+  },
+  {
+    key: 'A firm handshake',
+    label: 'A firm handshake',
+    icon: 'handshake'
+  }
+]
+const mockAttributes = [
+  {
+    key: 'Audience',    // marked optional in types, but required for checkboxes else returns 'undefined'
+    label: 'Audience',
+    icon: 'pi pi-users',         // must be 'pi pi-icon'
+    leaf: true,
     children: [
       {
-        key: 'Bowling Balls',
-        label: 'Bowling Balls',
-        icon: 'fas fa-bowling-ball'
+        key: 'community',
+        label: 'Community',
       },
       {
-        key: 'Cold War Surplus',
-        label: 'Cold War Surplus',
-        icon: 'fighter-jet'
+        key: 'essentialServiceWorkers',
+        label: 'Essential / Service Workers',
       },
       {
-        key: 'Lemons',
-        label: 'Lemons',
-        icon: 'lemon'
+        key: 'healthcare',
+        label: 'Healthcare',
       },
       {
-        key: 'Quidditch Supplies',
-        label: 'Quidditch Supplies',
-        icon: 'quidditch'
+        key: 'erICUstaff',
+        label: 'ER / ICU Staff',
       },
       {
-        key: 'A firm handshake',
-        label: 'A firm handshake',
-        icon: 'handshake'
+        key: 'crisis',
+        label: 'Crisis',
       }
     ]
   }
@@ -40,32 +65,48 @@ const mockList = [
 
 const TreeStateDefault = {
   nodes: [],
-  selection: null
+  selection: null,
+  categories: []
 };
 
-const FilterMenu = (props) => {
-  const [treeState, setState] = useState(TreeStateDefault)
+const FilterMenu = ({setState, records, _records}) => {
+  const [state, baseSetTree] = useState(TreeStateDefault);
+  const setTree = (props) => baseSetTree({...state, ...props});
   
-  useEffect((treeState) => {
+  useEffect(() => {
     (async function fetch () {
-      console.log('add filter categories')
-      setState({...treeState, nodes: mockList})
+      const menu = await getFilterMenu();
+      menu.eachPage(
+        (records, fetchNextPage) => {
+          const {categories, nodes} = parseRecords(records);
+          setTree({categories, nodes});
+        },
+        (err) => {
+          if (err) { console.error(err); return; }
+        }
+      );
     })()
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // disabling it b/c this should only run once and not based on changes.
 
-  const setSelection = event => setState({...treeState, selection: event.value})
+  const setSelection = event => setTree({selection: event.value});
 
   const classes = {
     root: classNames('foo')
-  }
-  console.log(treeState.selection)
+  };
+
   return (
     <div className={classes.root}>
-      <CategoriesList />
+      <CategoriesList categories={state.categories} />
+      <div className='p-panel'>
+        <div className='p-panel-titlebar'>
+          <span className="p-panel-title">Attributes</span>
+        </div>
+      </div>
       <Tree
-        value={treeState.nodes}
+        value={state.nodes}
         selectionMode='checkbox'
-        selectionKeys={treeState.selection}
+        selectionKeys={state.selection}
         onSelectionChange={setSelection}
         filter={true}
         filterPlaceholder='Filter'

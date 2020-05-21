@@ -12,9 +12,10 @@ import initFabLib from './shared/font-awesome-lib';
 import { getRows } from "./service/airtable";
 
 const StateDefault = {
+  _records: [], // immutable
   records: [],
   selectedCard: {},
-  visible: false
+  visible: false,
 };
 
 const App = () => {
@@ -27,10 +28,10 @@ const App = () => {
 
   useEffect(() => {
     (async function fetch() {
-      const sr = await getRows();
-      sr.eachPage(
+      const rows = await getRows();
+      rows.eachPage(
         (records, fetchNextPage) => {
-          setState({records});  
+          setState({records, _records: records});  
         },
         (err) => {
           if (err) { console.error(err); return; }
@@ -39,12 +40,11 @@ const App = () => {
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   // disabling it b/c this should only run once and not based on changes.
-
   
   return (
     <div style={{display: 'flex'}}>
       <div style={{display: 'flex', flex: 1, marginRight: '0.5rem'}}>
-        <FilterMenu />
+        <FilterMenu records={state.records} _records={state._records} stateChange={setState}/>
       </div>
       <div style={{display: 'flex', flex: state.visible ? 2 : 4}}>
         <CardContainer records={state.records} cardChange={setState} selectedCard={state.selectedCard} />

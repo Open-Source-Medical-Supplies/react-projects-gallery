@@ -1,45 +1,35 @@
-import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import IconItem from './icon-item';
+import { Button } from 'primereact/button';
+import { Panel } from 'primereact/panel';
+import React from "react";
 
-const CategoriesList = ({ list }) => {
-  const [state, setState] = useState({
-    open: true,
-    list,
-  });
+const CategoriesList = ({ categories: {parent, children} }) => {
+  // const [state, setState] = useState({
+  //   open: true,
+  //   list,
+  // });
   const handleClick = () => {
-    setState({ ...state, open: !state.open });
+    // setState({ ...state, open: !state.open });
   };
 
+  const CategoryBlock = ({data}) => (
+    <Button
+      className='p-col'
+      label={data.label}
+      onClick={handleClick}
+      >
+      <FontAwesomeIcon icon={data.icon} />
+    </Button>
+  );
+
   return (
-    <div>
-      {/* <ListItem button onClick={handleClick}>
-        <ListItemText primary={state.list.label} />
-        {state.open ? (
-          <FontAwesomeIcon icon="chevron-down" />
-        ) : (
-          <FontAwesomeIcon icon="chevron-up" />
-        )}
-      </ListItem>
-      <Collapse in={state.open} timeout="auto" unmountOnExit>
-        { 
-          state.list.label === 'Categories' ?
-            <Grid container spacing={1}>
-              {
-                state.list.options
-                .map((item) => <IconItem key={item.label} item={item}/>)
-              }
-            </Grid>
-            :
-            <List component="div" disablePadding>
-              {
-                state.list.options
-                .map((item) => <CheckboxItem key={item.label} item={item}/> )
-              }
-            </List>
+    <Panel header={parent?.label} toggleable={true}>
+      <div className='p-grid'>
+        {
+          children?.map(category => <CategoryBlock key={category.label} data={category}></CategoryBlock>)
         }
-      </Collapse> */}
-    </div>
+      </div>
+    </Panel>
   );
 };
 export default CategoriesList;
