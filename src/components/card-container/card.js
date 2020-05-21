@@ -13,12 +13,10 @@ const ProjectCard = ({data, setCard, selectedCard}) =>{
     setCard({selectedCard: data, visible: true});
   }
 
-  if (typeof data.HeaderImageURL !== 'string') {
-    console.warn('no image url: ' + data['Base ID'])
-  }
-
   const headerImage = (
-    <img className='centered-image' alt={name} src={imageURL} style={{ height: '150px' }}/>
+    typeof data.HeaderImageURL !== 'string' ?
+      <div className='center-flex' style={{height: '150px'}}>No image available</div> :
+      <img className='centered-image' alt={name} src={imageURL} style={{ height: '150px' }}/>
   )
   const footer = (
     <span style={{display: 'flex', justifyContent: 'flex-end'}}>
@@ -37,8 +35,12 @@ const ProjectCard = ({data, setCard, selectedCard}) =>{
   const highlight = classNames({
     "card-selected": !!selectedName && selectedName === name
   });
+  const sizing = classNames({
+    'p-col-4': !selectedName,
+    'p-col-6': !!selectedName
+  })
   return (
-    <div key={name} className='p-col-4'>
+    <div key={name} className={sizing}>
       <Card header={headerImage} footer={footer} className={highlight}>
         <h2 className='clamp-1'> {name} </h2>
         <h3 className='clamp-1'> {displayName} </h3>

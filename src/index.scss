@@ -11,6 +11,12 @@
   width: 100%;
 }
 
+.center-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .card-selected {
   box-shadow: inset 0px 0px 0px 2px $primary !important;
 }

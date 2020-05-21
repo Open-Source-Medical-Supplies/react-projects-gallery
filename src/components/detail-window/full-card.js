@@ -9,7 +9,9 @@ const FullCard = ({selectedCard}) => {
   } = MapCardToJSON(selectedCard);
   
   const headerImage = (
-    <img className='centered-image' alt={name} src={imageURL} style={{ height: '250px' }}/>
+    typeof imageURL !== 'string' ?
+      <div className='center-flex' style={{height: '150px'}}>No image available</div> :
+      <img className='centered-image' alt={name} src={imageURL} style={{ height: '250px' }}/>
   )
 
   const desc = (
