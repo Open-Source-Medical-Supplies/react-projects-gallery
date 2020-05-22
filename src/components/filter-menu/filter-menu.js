@@ -1,7 +1,6 @@
 import { Tree } from 'primereact/tree';
 import React, { useEffect, useState } from 'react';
 import { getFilterMenu } from '../../service/airtable';
-import { empty } from '../../shared/utilities';
 import CategoriesList from './categories-list';
 import { filterBy, parseRecords } from './filter-menu.utilities';
 

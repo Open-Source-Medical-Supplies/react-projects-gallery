@@ -1,4 +1,31 @@
-import { empty } from "../../shared/utilities";
+import { notEmpty } from "../../shared/utilities";
+
+const buildTree = (data, acc = {}) => {
+  const {key, parentKey} = data;
+  if (parentKey) {
+    if (acc[parentKey]) {
+      acc[parentKey].children.push(data);
+    } else {
+      acc[parentKey] = {
+        parent: null,
+        children: [data]
+      };
+    }
+  } else {
+    if (acc[key]) {
+      acc[key] =  {
+        ...data,
+        children: acc[key].children
+      };
+    } else {
+      acc[key] = {
+        ...data,
+        children: []
+      };
+    }
+  }
+  return acc;
+}
 
 export const parseRecords = (fields) => {
   const mappedRecords = fields.reduce((acc, field) => {
@@ -35,35 +62,8 @@ export const parseRecords = (fields) => {
   }
 };
 
-export const buildTree = (data, acc = {}) => {
-  const {key, parentKey} = data;
-  if (parentKey) {
-    if (acc[parentKey]) {
-      acc[parentKey].children.push(data);
-    } else {
-      acc[parentKey] = {
-        parent: null,
-        children: [data]
-      };
-    }
-  } else {
-    if (acc[key]) {
-      acc[key] =  {
-        ...data,
-        children: acc[key].children
-      };
-    } else {
-      acc[key] = {
-        ...data,
-        children: []
-      };
-    }
-  }
-  return acc;
-}
-
-export const flattenTree = (arrData) => {
-  // should make this properly recursive at some point but that's for a more rested brain
+const flattenTree = (arrData) => {
+  // should make this properly recursive at some point
   const acc = {};
   arrData.forEach(node => {
     acc[node.key] = node;
@@ -76,40 +76,47 @@ export const flattenTree = (arrData) => {
   return acc;
 }
 
-export const filtersAsTree = (nodes, filters) => {
-  // I need to stop doing (complex) tree operations at the end of the day. Headaches abound.
+const filtersAsTree = (nodes, filters) => {
   const filterKeys = Object.keys(filters);
   const flattenedNodes = flattenTree(nodes);
 
   const data = filterKeys.reduce((acc, key) => {
-    const {parentKey, label} = flattenedNodes[key];
-    acc.push({ key, parentKey, label, ...filters[key] });
+    const {parentKey, label, columnHeader} = flattenedNodes[key];
+    acc.push({ key, parentKey, label, columnHeader, ...filters[key] });
     return acc;
   }, []);
   
   return data.reduce((acc, field) => buildTree(field, acc), {});
 }
 
-export const combineFilters = (...filters) => {
+const combineFilters = (...filters) => {
   // ??
   return {...filters}
 }
 
+const checkNodes = (nodes, target) => {
+  if (nodes.length) {
+    return nodes.some(node => node.label === target)
+  }
+  return false;
+}
+
 export const filterBy = (filterState, _records) => {
   // combineFilters // ??
-  if (!empty(filterState.nodeFilters)) {
+  if (notEmpty(filterState.nodeFilters)) {
     const {nodes, nodeFilters} = filterState;
     const treedFilters = filtersAsTree(nodes, nodeFilters)
     const treedKeys = Object.keys(treedFilters);
 
-    const filteredRecords = _records.reduce((acc, record) => {
+    return _records.reduce((acc, record) => {
       let recordAdded = false;
       treedKeys.forEach(baseKey => {
-        const columnKey = treedFilters[baseKey].label;
-        if (!recordAdded && record[columnKey]) {
+        if(!recordAdded) {
+          const filter = treedFilters[baseKey];
+          const {children} = filter;
+          const columnKey = filter.columnHeader || filter.label;
           const colVal = record[columnKey];
-          // will always have children, else something is wrong
-          if( treedFilters[baseKey].children.some(child => child.label === colVal)) {
+          if (colVal && checkNodes(children, colVal)) {
             acc.push(record);
             recordAdded = true;
           }
@@ -117,9 +124,6 @@ export const filterBy = (filterState, _records) => {
       });
       return acc;
     }, []);
-    debugger
-    return filteredRecords;
-  } else {
-    return _records;
   }
+  return _records;
 }
