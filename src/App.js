@@ -31,7 +31,9 @@ const App = () => {
       const rows = await getRows();
       rows.eachPage(
         (records, fetchNextPage) => {
-          const simpleRecords = records.map(({fields}) => fields);
+          const simpleRecords = records
+            .map(({fields}) => fields) // strip Airtable operations
+            .filter(field => field.staging !== true);
           setState({records: simpleRecords, _records: simpleRecords});
         },
         (err) => {
@@ -43,7 +45,7 @@ const App = () => {
   
   return (
     <div style={{display: 'flex'}}>
-      <div style={{display: 'flex', flex: 1, marginRight: '0.5rem'}}>
+      <div style={{flex: 1, marginRight: '0.5rem'}}>
         <FilterMenu _records={state._records} setState={setState}/>
       </div>
       <div style={{display: 'flex', flex: state.visible ? 2 : 4}}>

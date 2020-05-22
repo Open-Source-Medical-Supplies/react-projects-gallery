@@ -43,8 +43,15 @@
   @include clamp-n(1);
 }
 
+.sticky-top-0 {
+  top: 0;
+  position: sticky;
+  position: -webkit-sticky;
+}
+
 .p-sidebar-right {
   position: sticky;
+  position: -webkit-sticky;
   height: 100vh;
   width: calc(100% - 0.5rem) !important;
   margin-left: 0.5rem !important;

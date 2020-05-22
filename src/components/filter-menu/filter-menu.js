@@ -49,7 +49,7 @@ const FilterMenu = ({setState, _records}) => {
   ]);
 
   return (
-    <div>
+    <div className='sticky-top-0'>
       <CategoriesList
         categories={filterState.categories}
         categoriesFilters={filterState.categoriesFilters}
