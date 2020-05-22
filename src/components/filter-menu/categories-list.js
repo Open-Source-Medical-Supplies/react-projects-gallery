@@ -1,33 +1,49 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from 'primereact/button';
 import { Panel } from 'primereact/panel';
-import React from "react";
+import React, { useState, useEffect } from "react";
+import classNames from "classnames";
 
-const CategoriesList = ({ categories: {parent, children} }) => {
-  // const [state, setState] = useState({
-  //   open: true,
-  //   list,
-  // });
-  const handleClick = () => {
-    // setState({ ...state, open: !state.open });
+const CategoriesList = ({ setFilterState, categoriesFilters, categories: {parent, children} }) => {
+  const [toggleState, baseSetToggleState] = useState({});
+  const setToggleState = (props) => baseSetToggleState({...toggleState, ...props});
+  
+  useEffect(() => {
+    setToggleState(children?.reduce((acc, category) => {
+      acc[category.key] = false;
+      return acc;
+    }, {}));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleClick = (key) => {
+    if (categoriesFilters[key] && toggleState[key]) {
+      delete categoriesFilters[key];
+      setToggleState({[key]: false});
+    } else {
+      categoriesFilters[key] = true;
+      setToggleState({[key]: true});
+    }
+    setFilterState({categoriesFilters})
   };
 
-  const CategoryBlock = ({data}) => (
-    <Button
-      className='p-col'
-      label={data.label}
-      onClick={handleClick}
-      >
-      <FontAwesomeIcon icon={data.icon} />
-    </Button>
-  );
+  const CategoryBlock = ({data}) => {
+    const classes = classNames(
+      "p-col p-component p-togglebutton", 
+      { 'p-highlight': toggleState[data.key] }
+    );
+    return (
+      <Button onClick={() => handleClick(data.key)} label={data.label} className={classes}>
+        <FontAwesomeIcon icon={data.icon} />
+      </Button>
+    );
+  };
 
   return (
     <Panel header={parent?.label} toggleable={true}>
       <div className='p-grid'>
-        {
-          children?.map(category => <CategoryBlock key={category.label} data={category}></CategoryBlock>)
-        }
+        { children.map(category => (
+          <CategoryBlock key={category.key} data={category}></CategoryBlock>
+        )) }
       </div>
     </Panel>
   );

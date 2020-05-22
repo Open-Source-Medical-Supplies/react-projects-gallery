@@ -31,7 +31,8 @@ const App = () => {
       const rows = await getRows();
       rows.eachPage(
         (records, fetchNextPage) => {
-          setState({records, _records: records});  
+          const simpleRecords = records.map(({fields}) => fields);
+          setState({records: simpleRecords, _records: simpleRecords});
         },
         (err) => {
           if (err) { console.error(err); return; }
@@ -44,7 +45,7 @@ const App = () => {
   return (
     <div style={{display: 'flex'}}>
       <div style={{display: 'flex', flex: 1, marginRight: '0.5rem'}}>
-        <FilterMenu records={state.records} _records={state._records} stateChange={setState}/>
+        <FilterMenu records={state.records} _records={state._records} setState={setState}/>
       </div>
       <div style={{display: 'flex', flex: state.visible ? 2 : 4}}>
         <CardContainer records={state.records} cardChange={setState} selectedCard={state.selectedCard} />

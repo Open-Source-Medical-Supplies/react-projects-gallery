@@ -1,85 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import CategoriesList from './categories-list';
-import classNames from "classnames";
 import { Tree } from 'primereact/tree';
+import React, { useEffect, useState } from 'react';
 import { getFilterMenu } from '../../service/airtable';
-import { parseRecords } from './filter-menu.utilities';
+import { empty } from '../../shared/utilities';
+import CategoriesList from './categories-list';
+import { filterBy, parseRecords } from './filter-menu.utilities';
 
-const mockCategories = [
-  {
-    key: 'Bowling Balls',
-    label: 'Bowling Balls',
-    icon: 'bowling-ball'
-  },
-  {
-    key: 'Cold War Surplus',
-    label: 'Cold War Surplus',
-    icon: 'fighter-jet'
-  },
-  {
-    key: 'Lemons',
-    label: 'Lemons',
-    icon: 'lemon'
-  },
-  {
-    key: 'Quidditch Supplies',
-    label: 'Quidditch Supplies',
-    icon: 'quidditch'
-  },
-  {
-    key: 'A firm handshake',
-    label: 'A firm handshake',
-    icon: 'handshake'
-  }
-]
-const mockAttributes = [
-  {
-    key: 'Audience',    // marked optional in types, but required for checkboxes else returns 'undefined'
-    label: 'Audience',
-    icon: 'pi pi-users',         // must be 'pi pi-icon'
-    leaf: true,
-    children: [
-      {
-        key: 'community',
-        label: 'Community',
-      },
-      {
-        key: 'essentialServiceWorkers',
-        label: 'Essential / Service Workers',
-      },
-      {
-        key: 'healthcare',
-        label: 'Healthcare',
-      },
-      {
-        key: 'erICUstaff',
-        label: 'ER / ICU Staff',
-      },
-      {
-        key: 'crisis',
-        label: 'Crisis',
-      }
-    ]
-  }
-]
-
-const TreeStateDefault = {
+const FilterStateDefault = {
   nodes: [],
-  selection: null,
-  categories: []
+  nodeFilters: {},
+  categories: {
+    parent: [],
+    children: []
+  },
+  categoriesFilters: {},
+  filters: {}
 };
 
 const FilterMenu = ({setState, records, _records}) => {
-  const [state, baseSetTree] = useState(TreeStateDefault);
-  const setTree = (props) => baseSetTree({...state, ...props});
-  
+  const [filterState, baseSetFilterState] = useState(FilterStateDefault);
+  const setFilterState = (props) => baseSetFilterState({...filterState, ...props});
+  const setSelection = event => setFilterState({nodeFilters: event.value});
+
+  // load menu
   useEffect(() => {
     (async function fetch () {
       const menu = await getFilterMenu();
       menu.eachPage(
         (records, fetchNextPage) => {
-          const {categories, nodes} = parseRecords(records);
-          setTree({categories, nodes});
+          const simpleFields = records.map(({fields}) => fields);
+          const {categories, nodes} = parseRecords(simpleFields);
+          setFilterState({categories, nodes});
         },
         (err) => {
           if (err) { console.error(err); return; }
@@ -87,26 +37,35 @@ const FilterMenu = ({setState, records, _records}) => {
       );
     })()
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  // disabling it b/c this should only run once and not based on changes.
 
-  const setSelection = event => setTree({selection: event.value});
+  // filter-changes
+  useEffect(() => {
+    const filteredRecords = filterBy(filterState, _records);
+    setState({records: filteredRecords});
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    filterState.categoriesFilters,
+    filterState.nodeFilters
+  ]);
 
-  const classes = {
-    root: classNames('foo')
-  };
+  console.log(filterState.nodeFilters)
 
   return (
-    <div className={classes.root}>
-      <CategoriesList categories={state.categories} />
+    <div>
+      <CategoriesList
+        categories={filterState.categories}
+        categoriesFilters={filterState.categoriesFilters}
+        setFilterState={setFilterState}/>
       <div className='p-panel'>
         <div className='p-panel-titlebar'>
           <span className="p-panel-title">Attributes</span>
         </div>
       </div>
       <Tree
-        value={state.nodes}
+        value={filterState.nodes}
         selectionMode='checkbox'
-        selectionKeys={state.selection}
+        selectionKeys={filterState.nodeFilters}
         onSelectionChange={setSelection}
         filter={true}
         filterPlaceholder='Filter'
