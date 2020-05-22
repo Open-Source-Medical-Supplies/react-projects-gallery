@@ -49,3 +49,12 @@
   width: calc(100% - 0.5rem) !important;
   margin-left: 0.5rem !important;
 }
+
+.p-card img {
+  margin-top: 2px;
+}
+
+.p-tree {
+  max-height: 80vh;
+  overflow: auto;
+}
