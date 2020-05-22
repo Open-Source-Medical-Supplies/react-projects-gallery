@@ -49,8 +49,6 @@ const FilterMenu = ({setState, records, _records}) => {
     filterState.nodeFilters
   ]);
 
-  console.log(filterState.nodeFilters)
-
   return (
     <div>
       <CategoriesList

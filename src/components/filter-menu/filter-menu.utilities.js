@@ -102,7 +102,7 @@ export const filterBy = (filterState, _records) => {
     const treedFilters = filtersAsTree(nodes, nodeFilters)
     const treedKeys = Object.keys(treedFilters);
 
-    const filteredRecords = Object.assign([], _records).reduce((acc, record) => {
+    const filteredRecords = _records.reduce((acc, record) => {
       let recordAdded = false;
       treedKeys.forEach(baseKey => {
         const columnKey = treedFilters[baseKey].label;
