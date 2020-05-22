@@ -88,8 +88,8 @@ const flattenTree = (arrData) => {
   return acc;
 }
 
-/*
-  builds a tree from flattened filters,
+/**
+ * builds a tree from flattened filters,
   pulling the relationship from the previously built (now flattened) menu nodes
 */
 const filtersAsTree = (nodes, filters) => {

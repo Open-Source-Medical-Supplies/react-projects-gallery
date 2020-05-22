@@ -11,6 +11,14 @@ import './shared/css/_prime.scss';
 import initFabLib from './shared/font-awesome-lib';
 import { getRows } from "./service/airtable";
 
+/**
+ * @type {{
+       _records: Array<{}>
+       records: Array<{}>
+       selectedCard: {}
+       visible: boolean
+  }} _records
+ */
 const StateDefault = {
   _records: [], // immutable
   records: [],
