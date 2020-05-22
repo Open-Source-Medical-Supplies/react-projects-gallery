@@ -1,4 +1,15 @@
-import { notEmpty } from "../../shared/utilities";
+import { notEmpty, createUUID } from "../../shared/utilities";
+
+export function attachUUID(nodes) {
+  // this requires a bit of weaving to integrate, better to just have unique names in the DB
+  return nodes.map(node => {
+    node.key += '-' + createUUID()
+    if (node.children) {
+      node.children = attachUUID(node.children);
+    }
+    return node;
+  });
+}
 
 const buildTree = (data, acc = {}) => {
   const {key, parentKey} = data;
@@ -139,7 +150,6 @@ const noFalsePositives = (filters) => {
 
 export const filterBy = (filterState, _records) => {
   // combineFilters // ??
-  debugger
   const filters = filterState.nodeFilters
   if (notEmpty(filters) && noFalsePositives(filters)) {
     const {nodes, nodeFilters} = filterState;

@@ -5,12 +5,18 @@ const CardContainer = ({records, cardChange, selectedCard}) => {
   return (
     <div className='p-grid'>
       {
-        records.map(fields => <ProjectCard
-          key={fields['Base ID']}
-          data={fields}
-          setCard={cardChange}
-          selectedCard={selectedCard}
-          /> )
+        records.reduce((acc, fields) => {
+          if(fields['Full Project Name']) {
+            acc.push(
+              <ProjectCard
+                key={fields['Base ID']}
+                data={fields}
+                setCard={cardChange}
+                selectedCard={selectedCard}/>
+            ); 
+          }
+          return acc;
+        }, [])
       }
     </div>
   );

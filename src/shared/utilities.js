@@ -19,3 +19,5 @@ export const empty = (o) => !Object.keys(o).length;
  * @returns {boolean}
  */
 export const notEmpty = (o) => !empty(o);
+
+export const createUUID = () => Math.round(Math.random() * 10000);

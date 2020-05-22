@@ -2,7 +2,7 @@ import { Tree } from 'primereact/tree';
 import React, { useEffect, useState } from 'react';
 import { getFilterMenu } from '../../service/airtable';
 import CategoriesList from './categories-list';
-import { filterBy, parseRecords } from './filter-menu.utilities';
+import { filterBy, parseRecords, attachUUID } from './filter-menu.utilities';
 
 const FilterStateDefault = {
   nodes: [],
@@ -15,7 +15,7 @@ const FilterStateDefault = {
   filters: {}
 };
 
-const FilterMenu = ({setState, records, _records}) => {
+const FilterMenu = ({setState, _records}) => {
   const [filterState, baseSetFilterState] = useState(FilterStateDefault);
   const setFilterState = (props) => baseSetFilterState({...filterState, ...props});
   const setSelection = event => setFilterState({nodeFilters: event.value});

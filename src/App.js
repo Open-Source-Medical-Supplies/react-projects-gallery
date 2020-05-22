@@ -40,12 +40,11 @@ const App = () => {
       );
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  // disabling it b/c this should only run once and not based on changes.
   
   return (
     <div style={{display: 'flex'}}>
       <div style={{display: 'flex', flex: 1, marginRight: '0.5rem'}}>
-        <FilterMenu records={state.records} _records={state._records} setState={setState}/>
+        <FilterMenu _records={state._records} setState={setState}/>
       </div>
       <div style={{display: 'flex', flex: state.visible ? 2 : 4}}>
         <CardContainer records={state.records} cardChange={setState} selectedCard={state.selectedCard} />
