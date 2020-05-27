@@ -32,7 +32,7 @@ const App = () => {
   let [state, baseSetState] = useState(StateDefault);
   const setState = (props) => baseSetState({...state, ...props});
 
-  const hide = () => setState({...StateDefault, records: state.records});
+  const hide = () => setState({selectedCard: {}, visible: false});
 
   useEffect(() => {
     (async function fetch() {
