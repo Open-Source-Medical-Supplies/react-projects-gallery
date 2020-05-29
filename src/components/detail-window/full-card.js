@@ -1,12 +1,20 @@
 import { Button } from 'primereact/button';
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 import { MapCardToJSON } from '../../service/mapCardToJSON';
 import { OpenExternalSafely, openExternal } from '../../shared/utilities';
 
 const FullCard = ({selectedCard}) => {
   const {
-    name, displayName, reviewStatus, imageURL, description, externalLink, attributionOrg, creator
+    name, displayName, reviewedBy, reviewStatus, imageURL, description, externalLink, attributionOrg, creator, osmsNotes
   } = MapCardToJSON(selectedCard);
+
+  const markdownSection = (sectionName, md) => (
+    <div key={sectionName}>
+      <h3>{sectionName}</h3>
+      <ReactMarkdown source={md} />
+    </div>
+  );
   
   const headerImage = (
     typeof imageURL !== 'string' ?
@@ -16,9 +24,10 @@ const FullCard = ({selectedCard}) => {
 
   const desc = (
     <section alt='description'>
-      <p>
-        {description}
-      </p>
+      <ReactMarkdown source={description} />
+      {
+        osmsNotes ? markdownSection('Notes', osmsNotes) : null
+      }
     </section>
   );
 
@@ -44,7 +53,7 @@ const FullCard = ({selectedCard}) => {
         {attributionOrg}
       </p>
     </section>
-  )
+  );
 
   const creatorAttr = !!creator ? (
     <section alt='Creator'>
@@ -55,8 +64,14 @@ const FullCard = ({selectedCard}) => {
     </section>
   ) : null;
 
-  console.log('todo: full-card icon + link/download ternary logic')
-  // icon='pi pi-download'
+  const reviewed = reviewedBy || reviewStatus ? (
+    <section alt='Reviewed by'>
+      <h3>{reviewedBy ? 'Reviewed By' : 'Review Status'}</h3>
+      <p>
+        {reviewedBy || reviewStatus}
+      </p>
+    </section>
+  ) : null;
 
   const footer = (
     <span alt='footer' className="full-card__footer">
@@ -77,9 +92,10 @@ const FullCard = ({selectedCard}) => {
         <h1>{name}</h1>
         <h3>{displayName}</h3>
         {desc}
-        {source}
         {attribution}
         {creatorAttr}
+        {reviewed}
+        {source}
       </div>
       {footer}
     </div>

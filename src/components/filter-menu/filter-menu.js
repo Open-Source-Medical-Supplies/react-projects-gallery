@@ -1,8 +1,9 @@
-import { Tree } from 'primereact/tree';
 import React, { useEffect, useState } from 'react';
 import { getFilterMenu } from '../../service/airtable';
 import CategoriesList from './categories-list';
-import { filterBy, parseRecords, attachUUID } from './filter-menu.utilities';
+import { filterBy, parseRecords } from './filter-menu.utilities';
+import { SearchBar } from './search-bar';
+import AttributesList from './attributes-list';
 
 const FilterStateDefault = {
   nodes: [],
@@ -50,23 +51,17 @@ const FilterMenu = ({setState, _records}) => {
 
   return (
     <div className='sticky-top-0'>
+      <SearchBar setState={setState} _records={_records} />
+      <div className='divider-1'></div>
       <CategoriesList
         categories={filterState.categories}
         categoriesFilters={filterState.categoriesFilters}
         setFilterState={setFilterState}/>
-      <div className='p-panel'>
-        <div className='p-panel-titlebar'>
-          <span className="p-panel-title">Attributes</span>
-        </div>
-      </div>
-      <Tree
-        value={filterState.nodes}
-        selectionMode='checkbox'
+      <div className='divider-1'></div>
+      <AttributesList
+        nodes={filterState.nodes}
         selectionKeys={filterState.nodeFilters}
-        onSelectionChange={setSelection}
-        filter={true}
-        filterPlaceholder='Filter'
-        ></Tree>
+        setSelection={setSelection}/>
     </div>
   );
 };

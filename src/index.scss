@@ -43,6 +43,10 @@
   @include clamp-n(1);
 }
 
+.divider-1 {
+  margin-bottom: 1rem;
+}
+
 .sticky-top-0 {
   top: 0;
   position: sticky;
@@ -64,4 +68,14 @@
 .p-tree {
   max-height: 80vh;
   overflow: auto;
+}
+
+.attribute-list-panel {
+  div.p-panel-content {
+    padding: 0;
+  }
+}
+
+div.p-grid {
+  width: 100%;
 }
