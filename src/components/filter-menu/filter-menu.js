@@ -16,7 +16,7 @@ const FilterStateDefault = {
   filters: {}
 };
 
-const FilterMenu = ({setState, _records}) => {
+const FilterMenu = ({setState, _records, records}) => {
   const [filterState, baseSetFilterState] = useState(FilterStateDefault);
   const setFilterState = (props) => baseSetFilterState({...filterState, ...props});
   const setSelection = event => setFilterState({nodeFilters: event.value});

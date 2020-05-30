@@ -3,6 +3,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { MapCardToJSON } from '../../service/mapCardToJSON';
 import { OpenExternalSafely, openExternal } from '../../shared/utilities';
+import ImageCarousel from '../../shared/components/image-carousel';
 
 const FullCard = ({selectedCard}) => {
   const {
@@ -46,32 +47,11 @@ const FullCard = ({selectedCard}) => {
     </section>
   );
 
-  const attribution = (
-    <section alt='Attribution Organization'>
-      <h3>Attribution Organization</h3>
-      <p>
-        {attributionOrg}
-      </p>
-    </section>
-  );
-
-  const creatorAttr = !!creator ? (
-    <section alt='Creator'>
-      <h3>Creator</h3>
-      <p>
-        {creator}
-      </p>
-    </section>
-  ) : null;
-
-  const reviewed = reviewedBy || reviewStatus ? (
-    <section alt='Reviewed by'>
-      <h3>{reviewedBy ? 'Reviewed By' : 'Review Status'}</h3>
-      <p>
-        {reviewedBy || reviewStatus}
-      </p>
-    </section>
-  ) : null;
+  const reviewed = reviewedBy ?
+    markdownSection(
+      reviewedBy ? 'Reviewed By' : 'Review Status',
+      reviewedBy || reviewStatus
+    ) : null;
 
   const footer = (
     <span alt='footer' className="full-card__footer">
@@ -85,6 +65,7 @@ const FullCard = ({selectedCard}) => {
     </span>
   );
 
+  console.log('carousel links todo')
   return (
     <div className="full-card">
       <div className="full-card__content">
@@ -92,10 +73,11 @@ const FullCard = ({selectedCard}) => {
         <h1>{name}</h1>
         <h3>{displayName}</h3>
         {desc}
-        {attribution}
-        {creatorAttr}
+        {attributionOrg ? markdownSection('Attribution Organization', attributionOrg) : null}
+        {creator ? markdownSection('Creator', creator) : null}
         {reviewed}
         {source}
+        <ImageCarousel links={[]}/>
       </div>
       {footer}
     </div>

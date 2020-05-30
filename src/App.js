@@ -54,7 +54,7 @@ const App = () => {
   return (
     <div style={{display: 'flex'}}>
       <div style={{flex: 1, marginRight: '0.5rem'}}>
-        <FilterMenu _records={state._records} setState={setState}/>
+        <FilterMenu records={state.records} _records={state._records} setState={setState}/>
       </div>
       <div style={{display: 'flex', flex: state.visible ? 2 : 4}}>
         <CardContainer records={state.records} cardChange={setState} selectedCard={state.selectedCard} />

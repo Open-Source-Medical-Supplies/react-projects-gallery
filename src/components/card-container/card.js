@@ -1,17 +1,15 @@
-import React from 'react';
-import {Card} from 'primereact/card';
-import {Button} from 'primereact/button';
 import classNames from "classnames";
+import { Button } from 'primereact/button';
+import React from 'react';
 import { MapCardToJSON } from '../../service/mapCardToJSON';
+import TileCard from '../../shared/components/tile-card';
 
 const ProjectCard = ({data, setCard, selectedCard}) =>{
   const {
     name, displayName, reviewStatus, imageURL
   } = MapCardToJSON(data);
 
-  const selectCard = () => {
-    setCard({selectedCard: data, visible: true});
-  }
+  const selectCard = () => setCard({selectedCard: data, visible: true});
 
   const headerImage = (
     typeof data.HeaderImageURL !== 'string' ?
@@ -41,10 +39,12 @@ const ProjectCard = ({data, setCard, selectedCard}) =>{
   })
   return (
     <div key={name} className={sizing}>
-      <Card header={headerImage} footer={footer} className={highlight}>
-        <h2 className='clamp-1'> {name} </h2>
-        <h3 className='clamp-1'> {displayName} </h3>
-      </Card>
+      <TileCard
+        header={name}
+        subHeader={displayName}
+        imageURL={imageURL}
+        className={highlight}
+        action={selectCard} />
     </div>
   );
 }
