@@ -2,20 +2,14 @@ import { Button } from 'primereact/button';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { MapCardToJSON } from '../../service/mapCardToJSON';
-import { OpenExternalSafely, openExternal } from '../../shared/utilities';
 import ImageCarousel from '../../shared/components/image-carousel';
+import MarkdownSection from '../../shared/components/markdown-p';
+import { openExternal, OpenExternalSafely } from '../../shared/utilities';
 
 const FullCard = ({selectedCard}) => {
   const {
     name, displayName, reviewedBy, reviewStatus, imageURL, description, externalLink, attributionOrg, creator, osmsNotes
   } = MapCardToJSON(selectedCard);
-
-  const markdownSection = (sectionName, md) => (
-    <div key={sectionName}>
-      <h3>{sectionName}</h3>
-      <ReactMarkdown source={md} />
-    </div>
-  );
   
   const headerImage = (
     typeof imageURL !== 'string' ?
@@ -27,7 +21,7 @@ const FullCard = ({selectedCard}) => {
     <section alt='description'>
       <ReactMarkdown source={description} />
       {
-        osmsNotes ? markdownSection('Notes', osmsNotes) : null
+        osmsNotes ? MarkdownSection('Notes', osmsNotes) : null
       }
     </section>
   );
@@ -46,12 +40,6 @@ const FullCard = ({selectedCard}) => {
       }
     </section>
   );
-
-  const reviewed = reviewedBy ?
-    markdownSection(
-      reviewedBy ? 'Reviewed By' : 'Review Status',
-      reviewedBy || reviewStatus
-    ) : null;
 
   const footer = (
     <span alt='footer' className="full-card__footer">
@@ -73,9 +61,12 @@ const FullCard = ({selectedCard}) => {
         <h1>{name}</h1>
         <h3>{displayName}</h3>
         {desc}
-        {attributionOrg ? markdownSection('Attribution Organization', attributionOrg) : null}
-        {creator ? markdownSection('Creator', creator) : null}
-        {reviewed}
+        {MarkdownSection('Attribution Organization', attributionOrg)}
+        {MarkdownSection('Creator', creator)}
+        {MarkdownSection(
+          reviewedBy ? 'Reviewed By' : 'Review Status',
+          reviewedBy || reviewStatus
+        )}
         {source}
         <ImageCarousel links={[]}/>
       </div>
