@@ -1,18 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import {InputText} from 'primereact/inputtext';
-import { MapCardToJSON } from '../../service/mapCardToJSON';
+import { InputText } from 'primereact/inputtext';
+import React, { useEffect, useState } from 'react';
 
-export const SearchBar = ({setState, _records}) => {
+export const SearchBar = ({setFilterState}) => {
   const [searchState, setSearchState] = useState('');
   const onInputChange = e => setSearchState(e.target.value);
   
-  useEffect(() => {
-    const filteredRecords = !searchState.length ? _records : _records.filter(record => {
-      const { name } = MapCardToJSON(record);
-      return name.toLowerCase().includes(searchState.toLowerCase())
-    });
-    setState({records: filteredRecords});
-  }, [searchState]); // eslint-disable-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => setFilterState({searchBar: searchState || ''}), [searchState]);
 
   return (
     <div className='sticky-top-0' style={{zIndex: 10}}>

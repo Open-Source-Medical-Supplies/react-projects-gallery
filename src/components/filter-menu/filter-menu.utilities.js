@@ -151,6 +151,8 @@ const noFalsePositives = (filters) => {
 export const filterBy = (filterState, _records) => {
   // combineFilters // ??
   const filters = filterState.nodeFilters
+
+  
   if (notEmpty(filters) && noFalsePositives(filters)) {
     const {nodes, nodeFilters} = filterState;
     const treedFilters = filtersAsTree(nodes, nodeFilters)

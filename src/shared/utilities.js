@@ -12,12 +12,12 @@ export const openExternal = (link) => () => window.open(link, OpenExternalSafely
  * @param {{}} o
  * @returns {boolean}
  */
-export const empty = (o) => !Object.keys(o).length;
+export const empty = o => !!o && !Object.keys(o).length;
 /**
  * 
  * @param {{}} o
  * @returns {boolean}
  */
-export const notEmpty = (o) => !empty(o);
+export const notEmpty = o => !empty(o);
 
 export const createUUID = () => Math.round(Math.random() * 10000);

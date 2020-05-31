@@ -1,7 +1,9 @@
 import React from 'react';
 import ProjectCard from './card';
+import { empty } from '../../shared/utilities';
 
 const CardContainer = ({records, cardChange, selectedCard}) => {
+  if(!records || empty(records)) { return null; }
   return (
     <div className='p-grid'>
       {

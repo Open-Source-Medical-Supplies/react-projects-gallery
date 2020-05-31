@@ -1,26 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { getFilterMenu } from '../../service/airtable';
+import { empty } from '../../shared/utilities';
+import AttributesList from './attributes-list';
 import CategoriesList from './categories-list';
 import { filterBy, parseRecords } from './filter-menu.utilities';
 import { SearchBar } from './search-bar';
-import AttributesList from './attributes-list';
 
 const FilterStateDefault = {
   nodes: [],
   nodeFilters: {},
-  categories: {
-    parent: [],
-    children: []
-  },
+  categories: {},
   categoriesFilters: {},
-  filters: {}
+  filters: {},
+  searchBar: ''
 };
 
-const FilterMenu = ({setState, _records, records}) => {
+const FilterMenu = ({state, setState}) => {
+  const {_records, records, categories} = state;
   const [filterState, baseSetFilterState] = useState(FilterStateDefault);
   const setFilterState = (props) => baseSetFilterState({...filterState, ...props});
   const setSelection = event => setFilterState({nodeFilters: event.value});
-
+  
+  useEffect(() => {
+    // maybe move the loading of categories down here from app.js
+    setFilterState({categories});
+  }, [categories]); // eslint-disable-line react-hooks/exhaustive-deps
+  
   // load menu
   useEffect(() => {
     (async function fetch () {
@@ -28,8 +33,8 @@ const FilterMenu = ({setState, _records, records}) => {
       menu.eachPage(
         (records, fetchNextPage) => {
           const simpleFields = records.map(({fields}) => fields);
-          const {categories, nodes} = parseRecords(simpleFields);
-          setFilterState({categories, nodes});
+          const {nodes} = parseRecords(simpleFields);
+          setFilterState({nodes});
         },
         (err) => {
           if (err) { console.error(err); return; }
@@ -40,18 +45,22 @@ const FilterMenu = ({setState, _records, records}) => {
 
   // filter-changes
   useEffect(() => {
+    if (empty(filterState)) { return; }
     const filteredRecords = filterBy(filterState, _records);
     setState({records: filteredRecords});
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     filterState.categoriesFilters,
-    filterState.nodeFilters
+    filterState.nodeFilters,
+    filterState.searchBar
   ]);
 
   return (
     <div className='sticky-top-0'>
-      <SearchBar setState={setState} _records={_records} />
+      <SearchBar
+        searchState={filterState.searchBar}
+        setFilterState={setFilterState}/>
       <div className='divider-1'></div>
       <CategoriesList
         categories={filterState.categories}

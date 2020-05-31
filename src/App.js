@@ -2,14 +2,14 @@ import "primeflex/primeflex.css";
 import 'primeicons/primeicons.css';
 import 'primereact/resources/primereact.min.css';
 import 'primereact/resources/themes/nova-light/theme.css';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CardContainer from './components/card-container/card-container';
 import DetailWindow from './components/detail-window/detail-window';
 import FullCard from "./components/detail-window/full-card";
 import FilterMenu from "./components/filter-menu/filter-menu";
+import { parseCategories, parseProjects } from "./service/app.service";
 import './shared/css/_prime.scss';
 import initFabLib from './shared/font-awesome-lib';
-import { getRows } from "./service/airtable";
 
 /**
  * @type {{
@@ -20,10 +20,11 @@ import { getRows } from "./service/airtable";
   }} _records
  */
 const StateDefault = {
-  _records: [], // immutable
+  _records: [], // 'immutable'
   records: [],
   selectedCard: {},
   visible: false,
+  categories: {}
 };
 
 const App = () => {
@@ -36,25 +37,23 @@ const App = () => {
 
   useEffect(() => {
     (async function fetch() {
-      const rows = await getRows();
-      rows.eachPage(
-        (records, fetchNextPage) => {
-          const simpleRecords = records
-            .map(({fields}) => fields) // strip Airtable operations
-            .filter(field => field.staging !== true);
-          setState({records: simpleRecords, _records: simpleRecords});
-        },
-        (err) => {
-          if (err) { console.error(err); return; }
-        }
-      );
+      Promise.all([
+        parseProjects(),
+        parseCategories()
+      ]).then(
+        res => setState({
+          ...res[0],
+          ...res[1]
+        }),
+        e => console.warn(e)
+      )
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   
   return (
     <div style={{display: 'flex'}}>
       <div style={{flex: 1, marginRight: '0.5rem'}}>
-        <FilterMenu records={state.records} _records={state._records} setState={setState}/>
+        <FilterMenu state={state} setState={setState}/>
       </div>
       <div style={{display: 'flex', flex: state.visible ? 2 : 4}}>
         <CardContainer records={state.records} cardChange={setState} selectedCard={state.selectedCard} />

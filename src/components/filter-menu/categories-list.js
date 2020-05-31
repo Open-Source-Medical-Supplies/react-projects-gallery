@@ -4,7 +4,9 @@ import { Panel } from 'primereact/panel';
 import React, { useState, useEffect } from "react";
 import classNames from "classnames";
 
-const CategoriesList = ({ setFilterState, categoriesFilters, categories: {parent, children} }) => {
+const CategoriesList = ({ setFilterState, categoriesFilters, categories }) => {
+  if(!!categories && Object.keys(categories).length) {debugger}
+  return <div></div>;
   const [toggleState, baseSetToggleState] = useState({});
   const setToggleState = (props) => baseSetToggleState({...toggleState, ...props});
   
