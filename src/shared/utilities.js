@@ -51,14 +51,14 @@ export const MAPPER = {
   },
   CategoryToJSON: function (category) {
     if (!category) return;
-    const name      = category['Full category Name'];
-    const webName   = category['web-name'];
+    const name      = category['Display Name'];
+    const key       = category['web-name'];
     const imageURL  = category['CoverImage'] ? category['CoverImage'][0].thumbnails.large.url : null;
   
     return {
       name,
       imageURL,
-      webName
+      key
     }
   }
 }

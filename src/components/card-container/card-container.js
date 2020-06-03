@@ -1,24 +1,21 @@
 import React from 'react';
 import ProjectCard from './card';
 import { empty } from '../../shared/utilities';
+import { DataView } from 'primereact/dataview';
 
 const CardContainer = ({records, cardChange, selectedCard}) => {
   if(!records || empty(records)) { return null; }
+
+  const MappedCard = data => (
+    <ProjectCard
+      key={data['Base ID']}
+      data={data}
+      setCard={cardChange}
+      selectedCard={selectedCard}/>
+  );
+
   return (
-    <div className='p-grid'>
-      {
-        records.reduce((acc, fields) => {
-            acc.push(
-              <ProjectCard
-                key={fields['Base ID']}
-                data={fields}
-                setCard={cardChange}
-                selectedCard={selectedCard}/>
-            ); 
-          return acc;
-        }, [])
-      }
-    </div>
+    <DataView value={records} layout='grid' itemTemplate={MappedCard} />
   );
 }
 

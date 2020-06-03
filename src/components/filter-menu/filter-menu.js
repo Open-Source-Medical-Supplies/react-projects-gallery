@@ -9,7 +9,7 @@ import { SearchBar } from './search-bar';
 const FilterStateDefault = {
   nodes: [],
   nodeFilters: {},
-  categories: {},
+  categories: [],
   categoriesFilters: {},
   filters: {},
   searchBar: ''
@@ -30,7 +30,6 @@ const FilterMenu = ({state, setState}) => {
       ]).then(
         res => {
           setFilterState({ ...res[0], ...res[1] })
-          debugger
         }
       );
     })()

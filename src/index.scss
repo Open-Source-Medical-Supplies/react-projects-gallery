@@ -23,6 +23,15 @@
   box-shadow: inset 0px 0px 0px 2px $primary !important;
 }
 
+.card-header{
+  &__image {
+    height: 150px;
+  }
+  &__no-image {
+    height: 152px;
+  }
+}
+
 .close-button {
   padding: 0.5rem;
   background: $primary;
@@ -80,4 +89,25 @@
 
 div.p-grid {
   width: 100%;
+}
+
+.category-list-card {
+  img.card-header__image, div.card-header__no-image {
+    height: 75px;
+  }
+}
+
+.button-no-style {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.filter-panel .p-toggleable-content {
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.p-panel .p-dataview-content {
+  padding: 0.571em 0 !important;
 }

@@ -4,7 +4,7 @@ import React from "react";
 
 const AttributesList = ({nodes, selectionKeys, setSelection}) => {
   return (
-    <Panel header='Attributes' toggleable={true} className='attribute-list-panel'>
+    <Panel header='Attributes' toggleable={true} className='attribute-list-panel filter-panel'>
       <Tree
         value={nodes}
         selectionMode="checkbox"
