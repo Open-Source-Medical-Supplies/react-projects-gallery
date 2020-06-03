@@ -1,4 +1,4 @@
-import { createUUID, notEmpty } from "../../shared/utilities";
+import { allNotEmpty, createUUID } from "../../shared/utilities";
 
 export function attachUUID(nodes) {
   // this requires a bit of weaving to integrate, better to just have unique names in the DB
@@ -43,12 +43,11 @@ export const parseRecords = (fields) => {
     if(field.icon) {
       field.icon = 'pi ' + field.icon;
     }
-    // nodes
     buildTree(field, acc);
-    // end nodes
     return acc;
   }, {});
-  return Object.keys(mappedRecords).map(nodeKey => mappedRecords[nodeKey]) // this feels hacky
+  
+  return Object.keys(mappedRecords).map(nodeKey => mappedRecords[nodeKey]);
 };
 
 const flattenTree = (arrData) => {
@@ -82,9 +81,14 @@ const filtersAsTree = (nodes, filters) => {
   return data.reduce((acc, field) => buildTree(field, acc), {});
 }
 
-const combineFilters = (...filters) => {
-  // ??
-  return {...filters}
+const combineFilters = (filterState) => {
+  const {categoriesFilters, nodeFilters, searchBar} = filterState;
+  const treedNodeFilters = filtersAsTree(filterState.nodes, nodeFilters)
+  return {
+    categories: categoriesFilters,
+    nodes: treedNodeFilters,
+    searchBar
+  }
 }
 
 /**
@@ -125,12 +129,14 @@ const noFalsePositives = (filters) => {
   return false
 };
 
-export const filterBy = (filterState, _records) => {
-  // combineFilters // ??
-  const filters = filterState.nodeFilters
+const filterByCategories = (filters, records) => {
+  // second
+}
 
+export const filterBy = (filterState, _records) => {
+  const filters = combineFilters(filterState);
   
-  if (notEmpty(filters) && noFalsePositives(filters)) {
+  if (allNotEmpty(filters) && noFalsePositives(filterState.nodeFilters)) {
     const {nodes, nodeFilters} = filterState;
     const treedFilters = filtersAsTree(nodes, nodeFilters)
     const treedFilterKeys = Object.keys(treedFilters);

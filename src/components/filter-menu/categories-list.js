@@ -1,9 +1,9 @@
 import classNames from "classnames";
+import { DataView } from 'primereact/dataview';
 import { Panel } from 'primereact/panel';
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TileCard from "../../shared/components/tile-card";
 import { MAPPER } from "../../shared/utilities";
-import { DataView } from 'primereact/dataview';
 
 const CategoriesList = ({ setFilterState, categoriesFilters, categories }) => {
   const [toggleState, baseSetToggleState] = useState({});
@@ -11,36 +11,30 @@ const CategoriesList = ({ setFilterState, categoriesFilters, categories }) => {
 
   categories = categories.map(c => MAPPER.CategoryToJSON(c));
   
-  useEffect(() => {
-    // setToggleState(children?.reduce((acc, category) => {
-    //   acc[category.key] = false;
-    //   return acc;
-    // }, {}));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleClick = (key) => () => {
-    if (categoriesFilters[key] && toggleState[key]) {
-      delete categoriesFilters[key];
-      setToggleState({[key]: false});
+  const handleClick = k => {
+    if (categoriesFilters[k] && toggleState[k]) {
+      delete categoriesFilters[k];
+      setToggleState({[k]: false});
     } else {
-      categoriesFilters[key] = true;
-      setToggleState({[key]: true});
+      categoriesFilters[k] = true;
+      setToggleState({[k]: true});
     }
-    setFilterState({categoriesFilters})
+    setFilterState({categoriesFilters});
+    console.log(categoriesFilters)
   };
 
   const CategoryBlock = (o) => {
     const classes = classNames(
-      "p-col p-component p-togglebutton", 
-      { 'p-highlight': toggleState[o.key] }
+      'category-list-card p-col-6',
+      { 'highlight-child': toggleState[o.name] }
     );
     return (
       <TileCard
         actionOnCard
-        className={'category-list-card p-col-6'}
+        action={() => handleClick(o.name)}
+        className={classes}
         header={o.name}
-        imageURL={o.imageURL}
-        action={handleClick(o.key)} ></TileCard>
+        imageURL={o.imageURL}></TileCard>
     );
   };
   

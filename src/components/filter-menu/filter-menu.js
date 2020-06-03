@@ -1,13 +1,14 @@
+import { ProgressSpinner } from 'primereact/progressspinner';
 import React, { useEffect, useState } from 'react';
 import { parseCategories, parseFilterMenu } from '../../service/filter-menu.service';
-import { empty } from '../../shared/utilities';
 import AttributesList from './attributes-list';
 import CategoriesList from './categories-list';
 import { filterBy } from './filter-menu.utilities';
 import { SearchBar } from './search-bar';
 
 const FilterStateDefault = {
-  nodes: [],
+  nodes: [], // attributes
+  flatNodes: {},
   nodeFilters: {},
   categories: [],
   categoriesFilters: {},
@@ -37,16 +38,12 @@ const FilterMenu = ({state, setState}) => {
 
   // filter-changes
   useEffect(() => {
-    if (empty(filterState)) { return; }
     const filteredRecords = filterBy(filterState, _records);
     setState({records: filteredRecords});
-    
+    console.log(records)
+    console.log(filterState)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    filterState.categoriesFilters,
-    filterState.nodeFilters,
-    filterState.searchBar
-  ]);
+  }, [filterState]);
 
   return (
     <div className='sticky-top-0'>
@@ -61,8 +58,14 @@ const FilterMenu = ({state, setState}) => {
       <div className='divider-1'></div>
       <AttributesList
         nodes={filterState.nodes}
-        selectionKeys={filterState.nodeFilters}
+        nodeFilters={filterState.nodeFilters}
         setSelection={setSelection}/>
+        {
+          filterState.loading ? 
+            <div className='filter-menu-loading'>
+              <ProgressSpinner />
+            </div> : null
+        }
     </div>
   );
 };

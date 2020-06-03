@@ -20,6 +20,21 @@ export const empty = o => !!o && !Object.keys(o).length;
  */
 export const notEmpty = o => !empty(o);
 
+export const allEmpty = o => {
+  for (const k in o) {
+    const v = o[k];
+    if (
+      ( typeof v === 'object' && notEmpty(v) ) ||
+      ( typeof v === 'string' && !!v.length )
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export const allNotEmpty = o => !allEmpty(o);
+
 export const createUUID = () => Math.round(Math.random() * 10000);
 
 export const MAPPER = {

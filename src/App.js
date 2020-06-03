@@ -28,8 +28,6 @@ const StateDefault = {
 };
 
 const App = () => {
-  initFabLib();
-
   let [state, baseSetState] = useState(StateDefault);
   const setState = (props) => baseSetState({...state, ...props});
 
