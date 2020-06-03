@@ -9,25 +9,46 @@ const VIEWS = {
   DEFAULT_VIEW: 'Default View'
 };
 
-export const AirtableHelpers = {
-  filterRecords: (r) => r.map(({fields}) => fields).filter(field => field.staging !== true)
+const filterRecords = r => r.map(({fields}) => fields).filter(field => field.staging !== true)
+
+const callATbase = async (apiCall) => {
+  let temp;
+  await apiCall().then(
+    async data => {
+      temp = AirtableHelpers.filterRecords(await data.all());
+    },
+    e => console.warn(e)
+  )
+  return temp;
 }
 
-export async function getProjects() {
+export const AirtableHelpers = {
+  filterRecords,
+  callATbase
+}
+
+export const AirtableCalls = {
+  getProjects,
+  getFilterMenu,
+  getCategories,
+  getBoM
+}
+
+async function getProjects() {
   return base('Engineered Project Pages').select({ view: VIEWS.DEFAULT_VIEW });
 }
 
-export async function getFilterMenu() {
+async function getFilterMenu() {
   return base('ProjectsFilterMenu').select({view: VIEWS.GRID_VIEW});
 }
 
-export async function getCategories() {
+async function getCategories() {
   return base('Medical Supply Categories').select({
     view: VIEWS.DEFAULT_GRID,
     fields: ['web-name', 'Display Name', 'CoverImage']
   });
 }
 
-export async function getBoM() {
+async function getBoM() {
   return base('Bill of Materials').select({view: VIEWS.GRID_VIEW});
 }

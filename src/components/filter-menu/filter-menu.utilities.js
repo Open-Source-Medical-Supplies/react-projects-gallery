@@ -40,18 +40,6 @@ const buildTree = (data, acc = {}) => {
 
 export const parseRecords = (fields) => {
   const mappedRecords = fields.reduce((acc, field) => {
-    // TODO: normalize 'categories' to match 'nodes'
-    const {key, parentKey} = field;
-    // categories
-    if (key === 'categories') {
-      acc.categories.parent = field;
-      return acc;
-    }
-    if (parentKey === 'categories') {
-      acc.categories.children.push(field);
-      return acc;
-    }
-    // end categories
     if(field.icon) {
       field.icon = 'pi ' + field.icon;
     }
@@ -59,13 +47,7 @@ export const parseRecords = (fields) => {
     buildTree(field, acc.nodes);
     // end nodes
     return acc;
-  }, {
-    categories: {
-      parent: null,
-      children: []
-    },
-    nodes: {}
-  });
+  }, {});
 
   const nodeKeys = Object.keys(mappedRecords.nodes);
   return {

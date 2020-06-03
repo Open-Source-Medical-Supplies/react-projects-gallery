@@ -1,4 +1,4 @@
-import { getCategories, getProjects, AirtableHelpers } from "./airtable";
+import { AirtableCalls, AirtableHelpers } from "./airtable";
 
 /**
  * @returns {Promise<{
@@ -7,28 +7,6 @@ import { getCategories, getProjects, AirtableHelpers } from "./airtable";
  }>}
 */
 export const parseProjects = async () => {
-  let temp;
-  await getProjects().then(async(projects) => {
-    const records = await projects.all();
-    const simpleRecords = AirtableHelpers.filterRecords(records);
-    temp = {records: simpleRecords, _records: simpleRecords}
-  });
-  return temp;
-};
-
-/**
- * @returns {Promise<{
-  categories: {};
- }>}
- */
-export const parseCategories = async () => {
-  let temp;
-  await getCategories().then(async(rows) => {
-    const records = await rows.all();
-    const simpleRecords = AirtableHelpers.filterRecords(records);
-    temp = {
-      categories: simpleRecords
-    };
-  });
-  return temp;
+  const records = await AirtableHelpers.callATbase(AirtableCalls.getProjects);
+  return {records, _records: records};
 };
