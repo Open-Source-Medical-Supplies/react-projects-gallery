@@ -7,7 +7,7 @@ import CardContainer from './components/card-container/card-container';
 import DetailWindow from './components/detail-window/detail-window';
 import FullCard from "./components/detail-window/full-card";
 import FilterMenu from "./components/filter-menu/filter-menu";
-import { parseCategories, parseProjects } from "./service/app.service";
+import { parseProjects } from "./service/app.service";
 import './shared/css/_prime.scss';
 import initFabLib from './shared/font-awesome-lib';
 
@@ -37,14 +37,8 @@ const App = () => {
 
   useEffect(() => {
     (async function fetch() {
-      Promise.all([
-        parseProjects(),
-        parseCategories()
-      ]).then(
-        res => setState({
-          ...res[0],
-          ...res[1]
-        }),
+      parseProjects().then(
+        res => setState({...res}),
         e => console.warn(e)
       )
     })();

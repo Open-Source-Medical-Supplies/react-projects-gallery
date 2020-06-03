@@ -45,7 +45,7 @@ async function getFilterMenu() {
 async function getCategories() {
   return base('Medical Supply Categories').select({
     view: VIEWS.DEFAULT_GRID,
-    fields: ['web-name', 'Display Name', 'CoverImage']
+    fields: ['web-name', 'Full Project Name', 'CoverImage']
   });
 }
 

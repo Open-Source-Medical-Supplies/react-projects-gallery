@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { getFilterMenu } from '../../service/airtable';
+import { parseCategories, parseFilterMenu } from '../../service/filter-menu.service';
 import { empty } from '../../shared/utilities';
 import AttributesList from './attributes-list';
 import CategoriesList from './categories-list';
-import { filterBy, parseRecords } from './filter-menu.utilities';
+import { filterBy } from './filter-menu.utilities';
 import { SearchBar } from './search-bar';
 
 const FilterStateDefault = {
@@ -16,28 +16,21 @@ const FilterStateDefault = {
 };
 
 const FilterMenu = ({state, setState}) => {
-  const {_records, records, categories} = state;
+  const {_records, records } = state;
   const [filterState, baseSetFilterState] = useState(FilterStateDefault);
   const setFilterState = (props) => baseSetFilterState({...filterState, ...props});
   const setSelection = event => setFilterState({nodeFilters: event.value});
   
-  useEffect(() => {
-    // maybe move the loading of categories down here from app.js
-    setFilterState({categories});
-  }, [categories]); // eslint-disable-line react-hooks/exhaustive-deps
-  
   // load menu
   useEffect(() => {
     (async function fetch () {
-      const menu = await getFilterMenu();
-      menu.eachPage(
-        (records, fetchNextPage) => {
-          const simpleFields = records.map(({fields}) => fields);
-          const {nodes} = parseRecords(simpleFields);
-          setFilterState({nodes});
-        },
-        (err) => {
-          if (err) { console.error(err); return; }
+      Promise.all([
+        parseFilterMenu(),
+        parseCategories()
+      ]).then(
+        res => {
+          setFilterState({ ...res[0], ...res[1] })
+          debugger
         }
       );
     })()

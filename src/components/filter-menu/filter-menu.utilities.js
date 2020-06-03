@@ -1,4 +1,4 @@
-import { notEmpty, createUUID } from "../../shared/utilities";
+import { createUUID, notEmpty } from "../../shared/utilities";
 
 export function attachUUID(nodes) {
   // this requires a bit of weaving to integrate, better to just have unique names in the DB
@@ -44,16 +44,11 @@ export const parseRecords = (fields) => {
       field.icon = 'pi ' + field.icon;
     }
     // nodes
-    buildTree(field, acc.nodes);
+    buildTree(field, acc);
     // end nodes
     return acc;
   }, {});
-
-  const nodeKeys = Object.keys(mappedRecords.nodes);
-  return {
-    categories: mappedRecords.categories,
-    nodes: nodeKeys.map(nodeKey => mappedRecords.nodes[nodeKey]) // this feels hacky
-  }
+  return Object.keys(mappedRecords).map(nodeKey => mappedRecords[nodeKey]) // this feels hacky
 };
 
 const flattenTree = (arrData) => {

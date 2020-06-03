@@ -3,7 +3,8 @@ import { AirtableCalls, AirtableHelpers } from "./airtable";
 
 export const parseFilterMenu = async () => {
   const records = await AirtableHelpers.callATbase(AirtableCalls.getFilterMenu);
-  return parseRecords(records);
+  const nodes = parseRecords(records);
+  return ({ nodes });
 };
 
 /**
@@ -13,5 +14,5 @@ export const parseFilterMenu = async () => {
 */
 export const parseCategories = async () => {
   const records = await AirtableHelpers.callATbase(AirtableCalls.getCategories);
-  return { categories: records };
+  return ({ categories: records });
 };
