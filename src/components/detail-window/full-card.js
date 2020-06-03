@@ -1,15 +1,14 @@
 import { Button } from 'primereact/button';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { MAPPER } from '../../service/mapCardToJSON';
 import ImageCarousel from '../../shared/components/image-carousel';
 import MarkdownSection from '../../shared/components/markdown-p';
-import { openExternal, OpenExternalSafely } from '../../shared/utilities';
+import { MAPPER, openExternal, OpenExternalSafely } from '../../shared/utilities';
 
 const FullCard = ({selectedCard}) => {
   const {
     name, displayName, reviewedBy, reviewStatus, imageURL, description, externalLink, attributionOrg, creator, osmsNotes
-  } = MAPPER.CardToJSON(selectedCard);
+  } = MAPPER.ProjectToJSON(selectedCard);
   
   const headerImage = (
     typeof imageURL !== 'string' ?

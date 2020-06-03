@@ -1,13 +1,12 @@
 import classNames from "classnames";
-import { Button } from 'primereact/button';
 import React from 'react';
-import { MAPPER } from '../../service/mapCardToJSON';
 import TileCard from '../../shared/components/tile-card';
+import { MAPPER } from '../../shared/utilities';
 
 const ProjectCard = ({data, setCard, selectedCard}) =>{
   const {
     name, displayName, reviewStatus, imageURL
-  } = MAPPER.CardToJSON(data);
+  } = MAPPER.ProjectToJSON(data);
 
   const selectCard = () => setCard({selectedCard: data, visible: true});
   

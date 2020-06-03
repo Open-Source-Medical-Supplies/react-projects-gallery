@@ -23,18 +23,18 @@ export const notEmpty = o => !empty(o);
 export const createUUID = () => Math.round(Math.random() * 10000);
 
 export const MAPPER = {
-  CardToJSON: function (card) {
-    if (!card) return;
-    const name = card['Full Project Name'];
-    const displayName = card['Display Name'] ? card['Display Name'][0] : '';  // b/c it's a lookup field in AT?
-    const reviewedBy = card['Reviewed By'] ? card['Reviewed By'] : '';
-    const reviewStatus = card['Review Status'] ? card['Review Status'][0] : '';
-    const imageURL = card.HeaderImageURL !== '#ERROR!' ? card.HeaderImageURL : '';
-    const description = card['Description'];
-    const externalLink = card['Link'];
-    const attributionOrg = card['Attribution Organization'];
-    const creator = card['Creator'] || '';
-    const osmsNotes = card['OSMS Notes'] || '';
+  ProjectToJSON: function (project) {
+    if (!project) return;
+    const name = project['Full Project Name'];
+    const displayName = project['Display Name'] ? project['Display Name'][0] : '';  // b/c it's a lookup field in AT?
+    const reviewedBy = project['Reviewed By'] ? project['Reviewed By'] : '';
+    const reviewStatus = project['Review Status'] ? project['Review Status'][0] : '';
+    const imageURL = project.HeaderImageURL !== '#ERROR!' ? project.HeaderImageURL : '';
+    const description = project['Description'];
+    const externalLink = project['Link'];
+    const attributionOrg = project['Attribution Organization'];
+    const creator = project['Creator'] || '';
+    const osmsNotes = project['OSMS Notes'] || '';
   
     return {
       attributionOrg,
@@ -49,11 +49,11 @@ export const MAPPER = {
       externalLink,
     }
   },
-  ProjectToJSON: function (project) {
-    if (!project) return;
-    const name      = project['Full Project Name'];
-    const webName   = project['web-name'];
-    const imageURL  = project['CoverImage'] ? project['CoverImage'][0].thumbnails.large.url : null;
+  CategoryToJSON: function (category) {
+    if (!category) return;
+    const name      = category['Full category Name'];
+    const webName   = category['web-name'];
+    const imageURL  = category['CoverImage'] ? category['CoverImage'][0].thumbnails.large.url : null;
   
     return {
       name,
