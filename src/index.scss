@@ -4,6 +4,8 @@
 @import './shared/css/mixins';
 @import './shared/css/variables';
 
+@import './shared/css/fonts/primeicons/fonts/export';
+
 .centered-image {
   // be sure to add a height attr to the element;
   object-fit: scale-down;
