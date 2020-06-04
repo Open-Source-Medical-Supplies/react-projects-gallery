@@ -1,12 +1,18 @@
 import { InputText } from 'primereact/inputtext';
 import React, { useEffect, useState } from 'react';
 
-export const SearchBar = ({setFilterState}) => {
+export const SearchBar = ({searchBarText, setFilterState}) => {
   const [searchState, setSearchState] = useState('');
   const onInputChange = e => setSearchState(e.target.value);
   
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => setFilterState({searchBar: searchState || ''}), [searchState]);
+  useEffect(() => {
+    setFilterState({
+      searchBar: searchState || '',
+      previous: {
+        searchBar: searchBarText || ''
+      }
+    });
+  }, [searchState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className='sticky-top-0' style={{zIndex: 10}}>

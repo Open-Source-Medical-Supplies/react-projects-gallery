@@ -4,22 +4,28 @@ import AttributesList from './attributes-list';
 import CategoriesList from './categories-list';
 import { filterBy } from './filter-menu.utilities';
 import { SearchBar } from './search-bar';
+import { FilterState } from './filter-menu.interface';
 
-const FilterStateDefault = {
+const FilterStateDefault: FilterState = {
   nodes: [], // attributes
   flatNodes: {},
   nodeFilters: {},
   categories: [],
   categoriesFilters: {},
   filters: {},
-  searchBar: ''
+  searchBar: '',
+  previousFilters: {
+    nodeFilters: {},
+    categoriesFilters: {},
+    searchBar: ''
+  }
 };
 
-const FilterMenu = ({state, setState}) => {
+const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
   const {_records, records } = state;
   const [filterState, baseSetFilterState] = useState(FilterStateDefault);
-  const setFilterState = (props) => baseSetFilterState({...filterState, ...props});
-  const setSelection = event => setFilterState({nodeFilters: event.value});
+  const setFilterState = (props: Partial<FilterState>) => baseSetFilterState({...filterState, ...props});
+  const setSelection = (event: any) => setFilterState({nodeFilters: event.value});
   
   // load menu
   useEffect(() => {
@@ -28,8 +34,9 @@ const FilterMenu = ({state, setState}) => {
         parseFilterMenu(),
         parseCategories()
       ]).then(
-        res => {
+        (res: any) => {
           setFilterState({ ...res[0], ...res[1] })
+          console.log(records)
         }
       );
     })()
@@ -39,14 +46,13 @@ const FilterMenu = ({state, setState}) => {
   useEffect(() => {
     const filteredRecords = filterBy(filterState, _records, records);
     setState({records: filteredRecords});
-    console.log(records)
     console.log(filterState)
   }, [filterState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className='sticky-top-0'>
       <SearchBar
-        searchState={filterState.searchBar}
+        searchBarText={filterState.searchBar}
         setFilterState={setFilterState}/>
       <div className='divider-1'></div>
       <CategoriesList

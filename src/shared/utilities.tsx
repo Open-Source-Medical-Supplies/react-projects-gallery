@@ -1,26 +1,12 @@
 export const OpenExternalSafely = '_blank noopener noreferrer nofollow';
 
-/**
- * 
- * @param {string} link 
- * @returns {Window}
- */
-export const openExternal = (link) => () => window.open(link, OpenExternalSafely);
+export const openExternal = (link: string) => () => window.open(link, OpenExternalSafely);
 
-/**
- * 
- * @param {{}} o
- * @returns {boolean}
- */
-export const empty = o => !!o && !Object.keys(o).length;
-/**
- * 
- * @param {{}} o
- * @returns {boolean}
- */
-export const notEmpty = o => !empty(o);
+export const empty = (o: object): boolean => !!o && !Object.keys(o).length;
 
-export const allEmpty = o => {
+export const notEmpty = (o: {}): boolean => !empty(o);
+
+export const allEmpty = (o: any): boolean => {
   for (const k in o) {
     const v = o[k];
     if (
@@ -33,13 +19,16 @@ export const allEmpty = o => {
   return true;
 }
 
-export const allNotEmpty = o => !allEmpty(o);
+export const allNotEmpty = (o: {}): boolean => !allEmpty(o);
 
 export const createUUID = () => Math.round(Math.random() * 10000);
 
+export type ProjectJSON = ReturnType<typeof MAPPER.ProjectToJSON>;
+export type CategoryJSON = ReturnType<typeof MAPPER.CategoryToJSON>;
+
 export const MAPPER = {
-  ProjectToJSON: function (project) {
-    if (!project) return;
+  ProjectToJSON: function (project: any) {
+    if (!project) return {};
     const name = project['Full Project Name'];
     const displayName = project['Display Name'] ? project['Display Name'][0] : '';  // b/c it's a lookup field in AT?
     const reviewedBy = project['Reviewed By'] ? project['Reviewed By'] : '';
@@ -66,8 +55,8 @@ export const MAPPER = {
       useCase
     }
   },
-  CategoryToJSON: function (category) {
-    if (!category) return;
+  CategoryToJSON: function (category: any) {
+    if (!category) return {};
     const name      = category['Display Name'];
     const key       = category['web-name'];
     const imageURL  = category['CoverImage'] ? category['CoverImage'][0].thumbnails.large.url : null;
