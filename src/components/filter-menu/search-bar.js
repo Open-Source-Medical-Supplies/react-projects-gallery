@@ -8,7 +8,7 @@ export const SearchBar = ({searchBarText, setFilterState}) => {
   useEffect(() => {
     setFilterState({
       searchBar: searchState || '',
-      previous: {
+      previousFilters: {
         searchBar: searchBarText || ''
       }
     });

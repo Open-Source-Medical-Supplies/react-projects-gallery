@@ -148,19 +148,21 @@ const filteringLevel = (filters: Filters, filterState: FilterState) => {
   );
   const byCategories = notEmpty(filters.categories);
   const byText = !!filters.searchBar.length;
-  const current = +byAttributes + +byCategories + +byText;
+  const current = +byAttributes + +byCategories;
 
   const prevByAttributes = deepCheckAttributes(
     filters.attributes,
-    filterState.nodeFilters
+    filterState.previousFilters.nodeFilters || {}
   );
-  const prevByCategories = notEmpty(filters.categories);
-  const prevByText = !!filters.searchBar.length;
-  const prev = +prevByAttributes + +prevByCategories + +prevByText;
-
+  const prevByCategories = notEmpty(filterState.previousFilters.categoriesFilters || {});
+  const prevByText = !!(filterState.previousFilters.searchBar || '').length;
+  const prev = +prevByAttributes + +prevByCategories;
+console.log(current)
+console.log(prev)
+console.log(byText > prevByText)
   return {
-    stricter: current > prev,
-    numFilters: current,
+    stricter: current > prev && byText > prevByText,
+    numFilters: current + +byText,
   };
 };
 

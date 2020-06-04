@@ -24,8 +24,24 @@ const FilterStateDefault: FilterState = {
 const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
   const {_records, records } = state;
   const [filterState, baseSetFilterState] = useState(FilterStateDefault);
-  const setFilterState = (props: Partial<FilterState>) => baseSetFilterState({...filterState, ...props});
-  const setSelection = (event: any) => setFilterState({nodeFilters: event.value});
+  const setFilterState = (props: Partial<FilterState>) => {
+    const update = {
+      ...props,
+      previousFilters: {
+        ...filterState.previousFilters,
+        ...props.previousFilters
+      }
+    };
+    baseSetFilterState({...filterState, ...update});
+  };
+  const setSelection = (event: any) => {
+    setFilterState({
+      nodeFilters: event.value,
+      previousFilters: {
+        nodeFilters: filterState.nodeFilters
+      }
+    });
+  };
   
   // load menu
   useEffect(() => {

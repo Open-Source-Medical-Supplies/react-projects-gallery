@@ -7,9 +7,9 @@ export interface FilterState {
   filters: {},
   searchBar: '',
   previousFilters: {
-    nodeFilters: {},
-    categoriesFilters: {},
-    searchBar: ''
+    nodeFilters?: {},
+    categoriesFilters?: {},
+    searchBar?: ''
   }
 };
 

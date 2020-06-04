@@ -12,6 +12,8 @@ const CategoriesList = ({ setFilterState, categoriesFilters, categories }) => {
   categories = categories.map(c => MAPPER.CategoryToJSON(c));
   
   const handleClick = k => {
+    const previous = Object.assign({}, categoriesFilters);
+
     if (categoriesFilters[k] && toggleState[k]) {
       delete categoriesFilters[k];
       setToggleState({[k]: false});
@@ -19,8 +21,12 @@ const CategoriesList = ({ setFilterState, categoriesFilters, categories }) => {
       categoriesFilters[k] = true;
       setToggleState({[k]: true});
     }
-    setFilterState({categoriesFilters});
-    console.log(categoriesFilters)
+    setFilterState({
+      categoriesFilters,
+      previousFilters: {
+        categoriesFilters: previous
+      }
+    });
   };
 
   const CategoryBlock = o => {
