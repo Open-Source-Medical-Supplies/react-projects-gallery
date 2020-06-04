@@ -1,10 +1,10 @@
 import { allNotEmpty, MAPPER, notEmpty } from "../../shared/utilities";
-import { FilterState } from "./filter-menu.interface";
+import { FilterState, PrimeAttr } from "./filter-menu.interface";
 
 interface Record {
   key?: string;
   parentKey?: string;
-  icon?: string
+  icon?: string;
   children?: Record[];
 }
 type Records = Record[];
@@ -12,8 +12,7 @@ type Filters = {
   categories: {};
   attributes: string[];
   searchBar: string;
-}
-
+};
 
 const buildTree = (data: Record, acc: any = {}) => {
   const { key, parentKey } = data;
@@ -42,13 +41,13 @@ const buildTree = (data: Record, acc: any = {}) => {
 };
 
 export const parseRecords = (records: Records) => {
-  const mappedRecords = records.reduce((acc, record) => {
+  const mappedRecords = (records.reduce((acc, record) => {
     if (record.icon) {
       record.icon = "pi " + record.icon;
     }
     buildTree(record, acc);
     return acc;
-  }, {}) as unknown as {[key: string]: Record};
+  }, {}) as unknown) as { [key: string]: Record };
 
   return Object.keys(mappedRecords).map((nodeKey) => mappedRecords[nodeKey]);
 };
@@ -68,7 +67,7 @@ export const flattenRecords = (records: Records) => {
 const processAttributes = (nodeFilters: any, flatNodes: any) => {
   const attrs = [];
   for (const k in nodeFilters) {
-    const v = nodeFilters[(k)];
+    const v = nodeFilters[k];
     const notParent = !!flatNodes[k].parentKey;
     if (v.checked && notParent) {
       attrs.push(k);
@@ -102,9 +101,12 @@ const checkAttributes = (attrs: string[], projectJSON: any, flatNodes: any) => {
   return false;
 };
 
-const checkSearchString = (target: string, projectJSON: ReturnType<typeof MAPPER.ProjectToJSON>) => {
+const checkSearchString = (
+  target: string,
+  projectJSON: ReturnType<typeof MAPPER.ProjectToJSON>
+) => {
   if (target.length) {
-    const {name, displayName} = projectJSON;
+    const { name, displayName } = projectJSON;
     return (
       name.toLowerCase().includes(target.toLowerCase()) ||
       displayName.toLowerCase().includes(target.toLowerCase())
@@ -113,84 +115,95 @@ const checkSearchString = (target: string, projectJSON: ReturnType<typeof MAPPER
   return false;
 };
 
-const checkCategories = (cats: any, projectJSON: ReturnType<typeof MAPPER.ProjectToJSON>) => {
+const checkCategories = (
+  cats: any,
+  projectJSON: ReturnType<typeof MAPPER.ProjectToJSON>
+) => {
   if (Object.keys(cats).length) {
     return cats[projectJSON.displayName];
   }
   return false;
 };
 
-// const noFalsePositives = (attrs: any) => {
-//   for (const k in attrs) {
-//     const v = attrs[k];
-    
-//   }
-//   checked, partialChecked
-// }
+const deepCheckAttributes = (attrs: string[], primeAttrs: PrimeAttr) => {
+  return notEmpty(attrs) && noFalsePositives(primeAttrs);
+};
 
-const stricterFiltering = (filters: Filters) => {
+const noFalsePositives = (attrs: PrimeAttr) => {
+  let check = false;
+  for (const k in attrs) {
+    const { checked, partialChecked } = attrs[k];
+    if (checked || partialChecked) {
+      check = true;
+    }
+  }
+  return check;
+};
+
+const filteringLevel = (filters: Filters, filterState: FilterState) => {
   // if there are more filters than the previous state
-  const byAttributes = notEmpty(filters.attributes);
+  const byAttributes = deepCheckAttributes(
+    filters.attributes,
+    filterState.nodeFilters
+  );
   const byCategories = notEmpty(filters.categories);
   const byText = !!filters.searchBar.length;
   const current = +byAttributes + +byCategories + +byText;
-  
-  const prevByAttributes = notEmpty(filters.attributes);
+
+  const prevByAttributes = deepCheckAttributes(
+    filters.attributes,
+    filterState.nodeFilters
+  );
   const prevByCategories = notEmpty(filters.categories);
   const prevByText = !!filters.searchBar.length;
   const prev = +prevByAttributes + +prevByCategories + +prevByText;
 
-  return current > prev;
-}
+  return {
+    stricter: current > prev,
+    numFilters: current,
+  };
+};
 
-export const filterBy = (filterState: FilterState, _records: Records, records: Records) => {
+const getFilterLevels = ({
+  checkAttrs,
+  checkText,
+  checkCats,
+}: {
+  checkAttrs: boolean;
+  checkText: boolean;
+  checkCats: boolean;
+}): { [key: number]: boolean } => ({
+  1: checkAttrs || checkText || checkCats,
+  2: (checkAttrs && checkText) ||
+    (checkAttrs && checkCats) ||
+    (checkText && checkCats),
+  3: checkAttrs && checkText && checkCats,
+});
+
+export const filterBy = (
+  filterState: FilterState,
+  _records: Records,
+  records: Records
+) => {
   const filters = combineFilters(filterState);
 
   if (allNotEmpty(filters)) {
-    const recordsBase = stricterFiltering(filters) ? records : _records;
+    const filterLevel = filteringLevel(filters, filterState);
+    const recordsBase = filterLevel.stricter ? records : _records;
 
     return recordsBase.reduce((acc: Records, project) => {
       const projectJSON = MAPPER.ProjectToJSON(project);
-      const checkAttrs = checkAttributes(
-        filters.attributes,
-        projectJSON,
-        filterState.flatNodes
-      );
+
+      const checkAttrs = checkAttributes(filters.attributes, projectJSON, filterState.flatNodes);
       const checkText = checkSearchString(filters.searchBar, projectJSON);
       const checkCats = checkCategories(filters.categories, projectJSON);
 
-      const filteringByAttributes = notEmpty(filters.attributes);
-      const filteringByText = !!filters.searchBar.length;
-      const filteringByCategories = notEmpty(filters.categories);
-      
-      const filterByAll = filteringByAttributes && filteringByText && filteringByCategories;
-      const moreThanOneFilterButNotAll =
-        (filteringByAttributes && filteringByText) ||
-        (filteringByAttributes && filteringByCategories) ||
-        (filteringByText && filteringByCategories);
-        if (filterByAll) {
-          debugger
-          if (checkAttrs && checkText && checkCats) {
-            acc.push(project);
-          }
-          return acc;
-        }
-        if (moreThanOneFilterButNotAll) {
-          debugger
-          if (
-            (checkAttrs && checkText) ||
-            (checkAttrs && checkCats) ||
-            (checkText && checkCats)
-        ) {
-          acc.push(project);
-        }
-        return acc;
-      }
-      // one filter
-      if (checkAttrs || checkText || checkCats) {
-        debugger
+      const projectMatches = getFilterLevels({checkAttrs, checkText, checkCats})[filterLevel.numFilters];
+
+      if (projectMatches) {
         acc.push(project);
       }
+
       return acc;
     }, []);
   }

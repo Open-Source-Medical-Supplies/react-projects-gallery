@@ -1,7 +1,7 @@
 export interface FilterState {
   nodes: [], // attributes
   flatNodes: {},
-  nodeFilters: {},
+  nodeFilters: PrimeAttr,
   categories: [],
   categoriesFilters: {},
   filters: {},
@@ -12,3 +12,10 @@ export interface FilterState {
     searchBar: ''
   }
 };
+
+export interface PrimeAttr {
+  [key: string]: {
+    checked: boolean;
+    partialChecked: boolean
+  }
+}
