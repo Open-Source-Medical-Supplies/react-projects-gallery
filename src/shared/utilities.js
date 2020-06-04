@@ -50,6 +50,7 @@ export const MAPPER = {
     const attributionOrg = project['Attribution Organization'];
     const creator = project['Creator'] || '';
     const osmsNotes = project['OSMS Notes'] || '';
+    const useCase = project['Use Case'] || '';
   
     return {
       attributionOrg,
@@ -62,6 +63,7 @@ export const MAPPER = {
       imageURL,
       description,
       externalLink,
+      useCase
     }
   },
   CategoryToJSON: function (category) {

@@ -1,4 +1,3 @@
-import { ProgressSpinner } from 'primereact/progressspinner';
 import React, { useEffect, useState } from 'react';
 import { parseCategories, parseFilterMenu } from '../../service/filter-menu.service';
 import AttributesList from './attributes-list';
@@ -38,12 +37,11 @@ const FilterMenu = ({state, setState}) => {
 
   // filter-changes
   useEffect(() => {
-    const filteredRecords = filterBy(filterState, _records);
+    const filteredRecords = filterBy(filterState, _records, records);
     setState({records: filteredRecords});
     console.log(records)
     console.log(filterState)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterState]);
+  }, [filterState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className='sticky-top-0'>
@@ -60,12 +58,6 @@ const FilterMenu = ({state, setState}) => {
         nodes={filterState.nodes}
         nodeFilters={filterState.nodeFilters}
         setSelection={setSelection}/>
-        {
-          filterState.loading ? 
-            <div className='filter-menu-loading'>
-              <ProgressSpinner />
-            </div> : null
-        }
     </div>
   );
 };

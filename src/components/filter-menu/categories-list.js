@@ -23,7 +23,7 @@ const CategoriesList = ({ setFilterState, categoriesFilters, categories }) => {
     console.log(categoriesFilters)
   };
 
-  const CategoryBlock = (o) => {
+  const CategoryBlock = o => {
     const classes = classNames(
       'category-list-card p-col-6',
       { 'highlight-child': toggleState[o.name] }

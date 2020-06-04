@@ -1,11 +1,8 @@
+import { DataView } from 'primereact/dataview';
 import React from 'react';
 import ProjectCard from './card';
-import { empty } from '../../shared/utilities';
-import { DataView } from 'primereact/dataview';
 
 const CardContainer = ({records, cardChange, selectedCard}) => {
-  if(!records || empty(records)) { return null; }
-
   const MappedCard = data => (
     <ProjectCard
       key={data['Base ID']}
@@ -14,9 +11,12 @@ const CardContainer = ({records, cardChange, selectedCard}) => {
       selectedCard={selectedCard}/>
   );
 
-  return (
-    <DataView value={records} layout='grid' itemTemplate={MappedCard} />
-  );
+  return records.length ?
+    <DataView value={records} layout='grid' itemTemplate={MappedCard} /> :
+    <div>
+      <h3>No records match that criteria</h3>
+    </div>
+  ;
 }
 
 export default CardContainer;
