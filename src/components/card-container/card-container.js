@@ -13,7 +13,7 @@ const CardContainer = ({records, cardChange, selectedCard}) => {
 
   return records.length ?
     <DataView value={records} layout='grid' itemTemplate={MappedCard} /> :
-    <div>
+    <div style={{alignSelf: 'center', margin: '0 auto'}}>
       <h3>No records match that criteria</h3>
     </div>
   ;

@@ -86,15 +86,25 @@ const combineFilters = (filterState: FilterState): Filters => {
 };
 
 const checkAttributes = (attrs: string[], projectJSON: any, flatNodes: any) => {
-  console.warn("you need to do something about Audience");
   if (Object.keys(attrs).length) {
+    // cycle through the selected attributes
     for (const i in attrs) {
       const attr = flatNodes[attrs[i]];
-      const target = attr.label;
-      const pKey = flatNodes[attr.parentKey].key;
-      const pVal = projectJSON[pKey];
-      if (pVal && pVal === target) {
+      const target: string = attr.label;
+      const pKey: string = flatNodes[attr.parentKey].key;
+      const pVal: string | string[] = projectJSON[pKey];
+      if (!pVal?.length) {
+        return false;
+      } else if (typeof pVal === 'string' && (pVal === target || pVal.includes(target))) {
         return true;
+      } else if (Array.isArray(pVal)) {
+        // cycle through the object's attributes to test against the current one
+        for (const j in pVal) {
+          const testVal = pVal[j];
+          if (testVal === target || testVal.includes(target)) {
+            return true;
+          }
+        }
       }
     }
   }

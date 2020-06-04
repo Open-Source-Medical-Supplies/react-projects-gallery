@@ -40,19 +40,27 @@ export const MAPPER = {
     const creator = project['Creator'] || '';
     const osmsNotes = project['OSMS Notes'] || '';
     const useCase = project['Use Case'] || '';
+    const audience = project['Audience'] || [];
+    const generalSkillsTools = project['General Skills/Tools'] || [];
+    const difficulty = project['Difficulty'] || [];
+    const projectType = project['Project Type'] || [];
   
     return {
       attributionOrg,
+      audience,
       creator,
+      description,
+      difficulty,
+      displayName,
+      externalLink,
+      generalSkillsTools,
+      imageURL,
       name,
       osmsNotes,
-      displayName,
       reviewedBy,
       reviewStatus,
-      imageURL,
-      description,
-      externalLink,
-      useCase
+      useCase,
+      projectType
     }
   },
   CategoryToJSON: function (category: any) {
