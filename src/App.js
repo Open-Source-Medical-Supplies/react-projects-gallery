@@ -7,8 +7,9 @@ import CardContainer from './components/card-container/card-container';
 import DetailWindow from './components/detail-window/detail-window';
 import FullCard from "./components/detail-window/full-card";
 import FilterMenu from "./components/filter-menu/filter-menu";
-import { parseProjects } from "./service/app.service";
+import { parseProjects, parseBoM } from "./service/app.service";
 import './shared/css/_prime.scss';
+import { empty } from "./shared/utilities";
 
 /**
  * @type {{
@@ -23,7 +24,9 @@ const StateDefault = {
   records: [],
   selectedCard: {},
   visible: false,
-  categories: {}
+  categories: {},
+  materials: {},
+  selectedMaterials: []
 };
 
 const App = () => {
@@ -34,12 +37,24 @@ const App = () => {
 
   useEffect(() => {
     (async function fetch() {
-      parseProjects().then(
-        res => setState({...res}),
-        e => console.warn(e)
-      )
+      Promise.all([
+        parseProjects(),
+        parseBoM()
+      ]).then(
+        (res) => {
+          setState({ ...res[0], ...res[1] })
+        }
+      );
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (empty(state.selectedCard)) {
+      return;
+    }
+    const selectedMaterials = state.materials[state.selectedCard['Full Project Name']];
+    setState({selectedMaterials});
+  }, [state.selectedCard]); // eslint-disable-line react-hooks/exhaustive-deps
   
   return (
     <div style={{display: 'flex'}}>
@@ -49,9 +64,9 @@ const App = () => {
       <div style={{display: 'flex', flex: state.visible ? 2 : 4}}>
         <CardContainer records={state.records} cardChange={setState} selectedCard={state.selectedCard} />
       </div>
-      <div style={{display: 'flex', flex: state.visible ? 2 : 0}}>
+      <div id='detail-window-container' style={{display: 'flex', flex: state.visible ? 2 : 0}}>
         <DetailWindow visible={state.visible} onHide={hide} className='p-sidebar-md'>
-          <FullCard selectedCard={state.selectedCard} />
+          <FullCard selectedCard={state.selectedCard} materials={state.selectedMaterials}/>
         </DetailWindow>
       </div>
     </div>

@@ -3,7 +3,7 @@ import React from "react";
 import { openExternal } from '../utilities';
 import TileCard from "./tile-card";
 
-const ImageCarousel = ({ links }) => {
+const ImageCarousel = ({ links, formatter, cardClassName }) => {
   const responsiveOptions = [
     {
       breakpoint: "1024px",
@@ -22,14 +22,20 @@ const ImageCarousel = ({ links }) => {
     },
   ];
   
-  const cardTemplate = ({header, imageURL, externalLink}) => {
-    return (
+  const cardTemplate = (data) => {
+    const {header, imageURL, externalLink} = formatter(data);
+
+    return externalLink ? 
       <TileCard
         header={header}
         imageURL={imageURL}
+        className={cardClassName}
         buttonIcon='external-link'
-        action={openExternal(externalLink)}/>
-    );
+        action={openExternal(externalLink)}/> :
+      <TileCard
+        header={header}
+        imageURL={imageURL} 
+        className={cardClassName}/>;
   };
 
   return (

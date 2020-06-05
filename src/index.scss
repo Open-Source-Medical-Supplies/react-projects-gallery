@@ -6,6 +6,40 @@
 
 @import './shared/css/fonts/primeicons/fonts/export';
 
+#projects-gallery {
+  height: 75vh;
+  overflow: auto;
+}
+
+#detail-window-container {
+  height: 75vh;
+  & > div.p-sidebar {
+    height: 100%;
+  }
+}
+
+@mixin tileCardFonts($header: 21px, $subHeader: 16.38px, $headerWeight: 700, $subHeaderWeight: 700) {
+  .tile-card {
+    &__header {
+      font-size: $header;
+      font-weight: $headerWeight;
+    }
+    
+    &__sub-header {
+      font-size: $subHeader;
+      font-weight: $subHeaderWeight;
+    }
+  }
+}
+
+.action-card {
+  @include tileCardFonts();
+}
+
+.fullcard-carousel-cards {
+  @include tileCardFonts(12px);
+}
+
 .centered-image {
   // be sure to add a height attr to the element;
   object-fit: scale-down;

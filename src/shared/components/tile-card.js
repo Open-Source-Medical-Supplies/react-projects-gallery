@@ -32,18 +32,18 @@ const TileCard = ({header, imageURL, subHeader, action, actionOnCard, className 
   );
 
   const ActionCard = () => (
-    <button className={className + ' button-no-style'} onClick={() => action()}>
+    <button className={className + ' tile-card button-no-style'} onClick={() => action()}>
       <Card header={headerImage}>
-        <h4 className='clamp-1'> {header} </h4>
-        { subHeader ? <h5 className='clamp-1'> {subHeader} </h5> : null }
+        <div className='tile-card__header clamp-1'> {header} </div>
+        { subHeader ? <div className='tile-card__sub-header clamp-1'> {subHeader} </div> : null }
       </Card>
     </button>
   );
 
   const DefaultCard = () => (
-    <Card header={headerImage} footer={footer} className={className}>
-      <h2 className='clamp-1'> {header} </h2>
-      { subHeader ? <h3 className='clamp-1'> {subHeader} </h3> : null }
+    <Card header={headerImage} footer={footer} className={className + ' tile-card'}>
+      <div className='tile-card__header clamp-1'> {header} </div>
+      { subHeader ? <h3 className='tile-card__sub-header clamp-1'> {subHeader} </h3> : null }
     </Card> 
   );
 

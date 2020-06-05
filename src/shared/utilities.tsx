@@ -74,5 +74,28 @@ export const MAPPER = {
       imageURL,
       key
     }
+  },
+  MaterialToJSON: (data: any) => {
+    if (!data) return {};
+    const name          = data['Full Project Name'];
+    const idealCaption  = data['Ideal Material Name'];
+    const imageURL      = data['Image'] ? data['Image'][0].thumbnails.large.url : null;
+    const detail        = data['Detail'] || '';
+    const fn            = data['Function'] || '';
+  
+    return {
+      name,
+      idealCaption,
+      imageURL,
+      detail,
+      fn
+    }
+  },
+  MaterialToCarousel: (data: any) => {
+    data = MAPPER.MaterialToJSON(data);
+    return {
+      header: data.idealCaption,
+      imageURL: data.imageURL,
+    }
   }
 }

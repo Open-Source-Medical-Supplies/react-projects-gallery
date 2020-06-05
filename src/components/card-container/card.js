@@ -12,8 +12,8 @@ const ProjectCard = ({data, setCard, selectedCard}) =>{
   
   const selectedName = selectedCard['Full Project Name'];
 
-  const highlight = classNames({
-    "card-selected": !!selectedName && selectedName === name
+  const card = classNames('action-card', {
+    "card-selected": !!selectedName && selectedName === name,
   });
   const sizing = classNames({
     'p-col-4': !selectedName,
@@ -25,7 +25,7 @@ const ProjectCard = ({data, setCard, selectedCard}) =>{
         header={name}
         subHeader={displayName}
         imageURL={imageURL}
-        className={highlight}
+        className={card}
         action={selectCard} />
     </div>
   );

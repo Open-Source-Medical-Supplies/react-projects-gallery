@@ -5,14 +5,14 @@ import ImageCarousel from '../../shared/components/image-carousel';
 import MarkdownSection from '../../shared/components/markdown-p';
 import { MAPPER, openExternal, OpenExternalSafely } from '../../shared/utilities';
 
-const FullCard = ({selectedCard}) => {
+const FullCard = ({selectedCard, materials}) => {
   const {
     name, displayName, reviewedBy, reviewStatus, imageURL, description, externalLink, attributionOrg, creator, osmsNotes
   } = MAPPER.ProjectToJSON(selectedCard);
   
   const headerImage = (
     typeof imageURL !== 'string' ?
-      <div className='center-flex' style={{height: '150px'}}>No image available</div> :
+      <div className='center-flex' style={{height: '152px'}}>No image available</div> :
       <img className='centered-image' alt={name} src={imageURL} style={{ height: '250px' }}/>
   )
 
@@ -52,7 +52,6 @@ const FullCard = ({selectedCard}) => {
     </span>
   );
 
-  console.log('carousel links todo')
   return (
     <div className="full-card">
       <div className="full-card__content">
@@ -67,7 +66,11 @@ const FullCard = ({selectedCard}) => {
           reviewedBy || reviewStatus
         )}
         {source}
-        <ImageCarousel links={[]}/>
+        { materials.length ?
+          <ImageCarousel
+            links={materials}
+            cardClassName='fullcard-carousel-cards'
+            formatter={MAPPER.MaterialToCarousel}/> : null }
       </div>
       {footer}
     </div>
