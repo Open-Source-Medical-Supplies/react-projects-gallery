@@ -167,9 +167,7 @@ const filteringLevel = (filters: Filters, filterState: FilterState) => {
   const prevByCategories = notEmpty(filterState.previousFilters.categoriesFilters || {});
   const prevByText = !!(filterState.previousFilters.searchBar || '').length;
   const prev = +prevByAttributes + +prevByCategories;
-console.log(current)
-console.log(prev)
-console.log(byText > prevByText)
+  
   return {
     stricter: current > prev && byText > prevByText,
     numFilters: current + +byText,

@@ -52,7 +52,6 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
       ]).then(
         (res: any) => {
           setFilterState({ ...res[0], ...res[1] })
-          console.log(records)
         }
       );
     })()
@@ -62,7 +61,6 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
   useEffect(() => {
     const filteredRecords = filterBy(filterState, _records, records);
     setState({records: filteredRecords});
-    console.log(filterState)
   }, [filterState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
