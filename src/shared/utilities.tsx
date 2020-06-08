@@ -36,6 +36,7 @@ export const MAPPER = {
     const imageURL = project.HeaderImageURL !== '#ERROR!' ? project.HeaderImageURL : '';
     const description = project['Description'];
     const externalLink = project['Link'];
+    const hyperLinkText = project['Hyperlink Text'];
     const attributionOrg = project['Attribution Organization'];
     const creator = project['Creator'] || '';
     const osmsNotes = project['OSMS Notes'] || '';
@@ -60,7 +61,8 @@ export const MAPPER = {
       reviewedBy,
       reviewStatus,
       useCase,
-      projectType
+      projectType,
+      hyperLinkText
     }
   },
   CategoryToJSON: function (category: any) {

@@ -3,11 +3,11 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import ImageCarousel from '../../shared/components/image-carousel';
 import MarkdownSection from '../../shared/components/markdown-p';
-import { MAPPER, openExternal, OpenExternalSafely } from '../../shared/utilities';
+import { MAPPER, openExternal } from '../../shared/utilities';
 
 const FullCard = ({selectedCard, materials}) => {
   const {
-    name, displayName, reviewedBy, reviewStatus, imageURL, description, externalLink, attributionOrg, creator, osmsNotes
+    name, displayName, reviewedBy, reviewStatus, imageURL, description, hyperLinkText, attributionOrg, creator, osmsNotes, externalLink
   } = MAPPER.ProjectToJSON(selectedCard);
   
   const headerImage = (
@@ -19,28 +19,13 @@ const FullCard = ({selectedCard, materials}) => {
   const desc = (
     <section alt='description'>
       <ReactMarkdown source={description} />
-      {
-        osmsNotes ? MarkdownSection('Notes', osmsNotes) : null
-      }
+      { MarkdownSection('Notes', osmsNotes) }
     </section>
   );
 
   const externalLinks = externalLink?.split(';') || [];
-  const source = (
-    <section alt='Sources' >
-      <h3>Source</h3>
-      {
-        externalLinks.map(link => ( 
-          // eslint-disable-next-line react/jsx-no-target-blank
-          <a key={link.slice(0,-10)} href={link} target='_blank' rel={OpenExternalSafely}>
-            <span className='clamp-1'>{link}</span>
-          </a>
-        ))
-      }
-    </section>
-  );
 
-  const footer = (
+  const footer = externalLinks && externalLinks[0] ? ( 
     <span alt='footer' className="full-card__footer">
       <Button
         onClick={openExternal(externalLinks[0])}
@@ -50,7 +35,7 @@ const FullCard = ({selectedCard, materials}) => {
         iconPos='right'
         className="p-button-raised p-button-rounded" />
     </span>
-  );
+  ) : null;
 
   return (
     <div className="full-card">
@@ -65,7 +50,7 @@ const FullCard = ({selectedCard, materials}) => {
           reviewedBy ? 'Reviewed By' : 'Review Status',
           reviewedBy || reviewStatus
         )}
-        {source}
+        {MarkdownSection('Sources', hyperLinkText)}
         { materials.length ?
           <ImageCarousel
             links={materials}
