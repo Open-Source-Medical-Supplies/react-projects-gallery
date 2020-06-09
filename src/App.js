@@ -52,19 +52,19 @@ const App = () => {
     if (empty(state.selectedCard)) {
       return;
     }
-    const selectedMaterials = state.materials[state.selectedCard['Full Project Name']];
+    const selectedMaterials = state.materials[state.selectedCard['Full Project Name']] || [];
     setState({selectedMaterials});
   }, [state.selectedCard]); // eslint-disable-line react-hooks/exhaustive-deps
   
   return (
     <div style={{display: 'flex'}}>
-      <div style={{flex: 1, marginRight: '0.5rem'}}>
+      <div id='app__filter-menu' style={{flex: 1, marginRight: '0.5rem'}}>
         <FilterMenu state={state} setState={setState}/>
       </div>
-      <div style={{display: 'flex', flex: state.visible ? 2 : 4}}>
+      <div id='app__card-container' style={{display: 'flex', flex: state.visible ? 2 : 4}}>
         <CardContainer records={state.records} cardChange={setState} selectedCard={state.selectedCard} />
       </div>
-      <div id='detail-window-container' style={{display: 'flex', flex: state.visible ? 2 : 0}}>
+      <div id='app__detail-window-container' style={{display: 'flex', flex: state.visible ? 2 : 0}}>
         <DetailWindow visible={state.visible} onHide={hide} className='p-sidebar-md'>
           <FullCard selectedCard={state.selectedCard} materials={state.selectedMaterials}/>
         </DetailWindow>

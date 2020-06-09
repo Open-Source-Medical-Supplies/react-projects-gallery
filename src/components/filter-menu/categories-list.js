@@ -1,15 +1,26 @@
 import classNames from "classnames";
 import { DataView } from 'primereact/dataview';
 import { Panel } from 'primereact/panel';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TileCard from "../../shared/components/tile-card";
-import { MAPPER } from "../../shared/utilities";
+import { MAPPER, empty, notEmpty } from "../../shared/utilities";
 
 const CategoriesList = ({ setFilterState, categoriesFilters, categories }) => {
   const [toggleState, baseSetToggleState] = useState({});
   const setToggleState = (props) => baseSetToggleState({...toggleState, ...props});
 
   categories = categories.map(c => MAPPER.CategoryToJSON(c));
+
+  useEffect(() => {
+    // ensure deactivated toggles on selection-clear
+    if (empty(categoriesFilters) && notEmpty(toggleState)) {
+      const tempState = Object.assign({}, toggleState);
+      for (const k in tempState) {
+        tempState[k] = false;
+      }
+      setToggleState(tempState);
+    }
+  }, [categoriesFilters])
   
   const handleClick = k => {
     const previous = Object.assign({}, categoriesFilters);

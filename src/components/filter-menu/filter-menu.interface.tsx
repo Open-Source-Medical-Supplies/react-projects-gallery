@@ -10,7 +10,8 @@ export interface FilterState {
     nodeFilters?: {},
     categoriesFilters?: {},
     searchBar?: ''
-  }
+  },
+  isFiltering: boolean;
 };
 
 export interface PrimeAttr {

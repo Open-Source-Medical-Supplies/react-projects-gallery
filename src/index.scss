@@ -7,14 +7,25 @@
 @import './shared/css/fonts/primeicons/fonts/export';
 
 #projects-gallery {
-  height: 75vh;
+  height: 100vh;
   overflow: auto;
+  background-color: $bg;
 }
 
-#detail-window-container {
-  height: 75vh;
-  & > div.p-sidebar {
-    height: 100%;
+#app__ {
+  &filter-menu > div {
+    height: 100vh;
+    overflow-y: auto;
+  }
+  &card-container {
+    height: 100vh;
+    overflow-y: auto;
+  }  
+  &detail-window-container {
+    height: 100vh;
+    & > div.p-sidebar {
+      height: 100%;
+    }
   }
 }
 
@@ -140,6 +151,11 @@ div.p-grid, .p-dataview.p-component.p-dataview-grid {
 .filter-panel {
   &.p-panel .p-panel-content {
     padding: 0;
+    border: none;
+
+    .p-tree {
+      border: none;
+    }
   }
 
   .p-toggleable-content {
@@ -152,8 +168,26 @@ div.p-grid, .p-dataview.p-component.p-dataview-grid {
   padding: 0.571em 0 !important;
 }
 
+div.p-dataview.p-component.p-dataview-grid > div.p-dataview-content {
+  border: none;
+  background-color: transparent;
+}
+
 .highlight-child > div {
   background-color: #007ad9;
   border-color: #007ad9;
   color: #ffffff;
+}
+
+.search-bar-wrapper {
+  display: flex;
+
+  #search-bar-container {
+    margin-right: 0.5rem;
+    height: 31px;
+
+    #searchBar {
+      height: 32.6px;
+    }
+  }
 }

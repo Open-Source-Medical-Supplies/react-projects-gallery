@@ -9,7 +9,7 @@ const FullCard = ({selectedCard, materials}) => {
   const {
     name, displayName, reviewedBy, reviewStatus, imageURL, description, hyperLinkText, attributionOrg, creator, osmsNotes, externalLink
   } = MAPPER.ProjectToJSON(selectedCard);
-  
+
   const headerImage = (
     typeof imageURL !== 'string' ?
       <div className='center-flex' style={{height: '152px'}}>No image available</div> :
@@ -44,8 +44,13 @@ const FullCard = ({selectedCard, materials}) => {
         <h1>{name}</h1>
         <h3>{displayName}</h3>
         {desc}
-        {MarkdownSection('Attribution Organization', attributionOrg)}
-        {MarkdownSection('Creator', creator)}
+        {
+          attributionOrg || creator ?
+            <div className='p-grid'>
+              {MarkdownSection('Attribution Organization', attributionOrg, 'p-col')}
+              {MarkdownSection('Creator', creator, 'p-col')}
+            </div> : null
+        }
         {MarkdownSection(
           reviewedBy ? 'Reviewed By' : 'Review Status',
           reviewedBy || reviewStatus

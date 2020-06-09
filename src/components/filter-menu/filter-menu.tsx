@@ -5,6 +5,9 @@ import CategoriesList from './categories-list';
 import { filterBy } from './filter-menu.utilities';
 import { SearchBar } from './search-bar';
 import { FilterState } from './filter-menu.interface';
+import ClearFilters from './clear-filers';
+
+export type SetFilterFn = (props: Partial<FilterState>) => void;
 
 const FilterStateDefault: FilterState = {
   nodes: [], // attributes
@@ -18,13 +21,14 @@ const FilterStateDefault: FilterState = {
     nodeFilters: {},
     categoriesFilters: {},
     searchBar: ''
-  }
+  },
+  isFiltering: false
 };
 
 const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
   const {_records, records } = state;
   const [filterState, baseSetFilterState] = useState(FilterStateDefault);
-  const setFilterState = (props: Partial<FilterState>) => {
+  const setFilterState: SetFilterFn = (props: Partial<FilterState>) => {
     const update = {
       ...props,
       previousFilters: {
@@ -57,17 +61,34 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
     })()
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const nodeFiltersBool = Object.keys(filterState.nodeFilters).length;
+  const catFilterBool = Object.keys(filterState.categoriesFilters).length;
+
   // filter-changes
   useEffect(() => {
-    const filteredRecords = filterBy(filterState, _records, records);
-    setState({records: filteredRecords});
-  }, [filterState]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (
+      filterState.nodeFilters || 
+      filterState.categoriesFilters ||
+      filterState.searchBar
+    ) {
+      const filteredRecords = filterBy(filterState, _records, records);
+      setState({records: filteredRecords});
+      setFilterState({isFiltering: _records.length > filteredRecords.length});
+    }
+  }, [
+    nodeFiltersBool,
+    catFilterBool,
+    filterState.searchBar
+  ]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className='sticky-top-0'>
-      <SearchBar
-        searchBarText={filterState.searchBar}
-        setFilterState={setFilterState}/>
+    <div>
+      <div className='search-bar-wrapper'>
+        <SearchBar
+          searchBarText={filterState.searchBar}
+          setFilterState={setFilterState}/>
+        <ClearFilters setFilterState={setFilterState} isFiltering={filterState.isFiltering} />
+      </div>
       <div className='divider-1'></div>
       <CategoriesList
         categories={filterState.categories}
