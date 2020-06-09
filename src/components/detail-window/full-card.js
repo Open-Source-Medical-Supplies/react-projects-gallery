@@ -3,11 +3,11 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import ImageCarousel from '../../shared/components/image-carousel';
 import MarkdownSection from '../../shared/components/markdown-p';
-import { MAPPER, openExternal } from '../../shared/utilities';
+import { MAPPER, openExternal, AopenExternal } from '../../shared/utilities';
 
 const FullCard = ({selectedCard, materials}) => {
   const {
-    name, displayName, reviewedBy, reviewStatus, imageURL, description, hyperLinkText, attributionOrg, creator, osmsNotes, externalLink
+    name, displayName, reviewedBy, medicalStatus, imageURL, description, hyperLinkText, attributionOrg, creator, osmsNotes, externalLink
   } = MAPPER.ProjectToJSON(selectedCard);
 
   const headerImage = (
@@ -37,12 +37,14 @@ const FullCard = ({selectedCard, materials}) => {
     </span>
   ) : null;
 
+  const linkOut = '/category-library?category=' + encodeURI(displayName);
+
   return (
     <div className="full-card">
       <div className="full-card__content">
         {headerImage}
         <h1>{name}</h1>
-        <h3>{displayName}</h3>
+        {AopenExternal(linkOut, <h2>{displayName}</h2>)}
         {desc}
         {
           attributionOrg || creator ?
@@ -51,10 +53,7 @@ const FullCard = ({selectedCard, materials}) => {
               {MarkdownSection('Creator', creator, 'p-col')}
             </div> : null
         }
-        {MarkdownSection(
-          reviewedBy ? 'Reviewed By' : 'Review Status',
-          reviewedBy || reviewStatus
-        )}
+        {MarkdownSection(medicalStatus, reviewedBy, '', true)}
         {MarkdownSection('Sources', hyperLinkText)}
         { materials.length ?
           <ImageCarousel

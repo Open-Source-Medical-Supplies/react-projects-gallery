@@ -5,7 +5,7 @@ import { MAPPER } from '../../shared/utilities';
 
 const ProjectCard = ({data, setCard, selectedCard}) =>{
   const {
-    name, displayName, reviewStatus, imageURL
+    name, displayName, imageURL // medicalStatus -> caduceus icon
   } = MAPPER.ProjectToJSON(data);
 
   const selectCard = () => setCard({selectedCard: data, visible: true});

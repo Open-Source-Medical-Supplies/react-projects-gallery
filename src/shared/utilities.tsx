@@ -1,6 +1,10 @@
+import React from 'react';
+
 export const OpenExternalSafely = '_blank noopener noreferrer nofollow';
 
 export const openExternal = (link: string) => () => window.open(link, OpenExternalSafely);
+
+export const AopenExternal = (href: string, children: any) => <a href={href} target='_blank' rel='noopener noreferrer nofollow'>{children}</a>
 
 export const empty = (o: object): boolean => !!o && !Object.keys(o).length;
 
@@ -32,7 +36,7 @@ export const MAPPER = {
     const name = project['Full Project Name'];
     const displayName = project['Display Name'] ? project['Display Name'][0] : '';  // b/c it's a lookup field in AT?
     const reviewedBy = project['Reviewed By'] ? project['Reviewed By'] : '';
-    const reviewStatus = project['Review Status'] ? project['Review Status'][0] : '';
+    const medicalStatus = project['Medical Status'] ? project['Medical Status'][0] : '';
     const imageURL = project.HeaderImageURL !== '#ERROR!' ? project.HeaderImageURL : '';
     const description = project['Description'];
     const externalLink = project['Link'];
@@ -59,7 +63,7 @@ export const MAPPER = {
       name,
       osmsNotes,
       reviewedBy,
-      reviewStatus,
+      medicalStatus,
       useCase,
       projectType,
       hyperLinkText
