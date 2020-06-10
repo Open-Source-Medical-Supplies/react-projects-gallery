@@ -101,6 +101,7 @@ export const MAPPER = {
     data = MAPPER.MaterialToJSON(data);
     return {
       header: data.idealCaption,
+      subHeader: data.detail || '',
       imageURL: data.imageURL,
     }
   }

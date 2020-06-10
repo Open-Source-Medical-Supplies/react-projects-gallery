@@ -7,22 +7,21 @@
 @import './shared/css/fonts/primeicons/fonts/export';
 
 #projects-gallery {
-  height: 100vh;
-  overflow: auto;
   background-color: $bg;
 }
 
 #app__ {
   &filter-menu > div {
-    height: 100vh;
+    height: calc(100vh - 150px);
     overflow-y: auto;
+    padding-bottom: 20px;
   }
   &card-container {
-    height: 100vh;
+    height: calc(100vh - 150px);
     overflow-y: auto;
   }  
   &detail-window-container {
-    height: 100vh;
+    height: calc(100vh - 150px);
     & > div.p-sidebar {
       height: 100%;
     }
@@ -185,6 +184,7 @@ div.p-dataview.p-component.p-dataview-grid > div.p-dataview-content {
   #search-bar-container {
     margin-right: 0.5rem;
     height: 31px;
+    width: 100%;
 
     #searchBar {
       height: 32.6px;
