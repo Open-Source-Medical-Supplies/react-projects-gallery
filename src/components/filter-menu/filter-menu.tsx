@@ -7,6 +7,8 @@ import { SearchBar } from './search-bar';
 import { FilterState } from './filter-menu.interface';
 import ClearFilters from './clear-filers';
 
+/* eslint-disable react-hooks/exhaustive-deps */
+
 export type SetFilterFn = (props: Partial<FilterState>) => void;
 
 const FilterStateDefault: FilterState = {
@@ -59,7 +61,7 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
         }
       );
     })()
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const nodeFiltersBool = Object.keys(filterState.nodeFilters).length;
   const catFilterBool = Object.keys(filterState.categoriesFilters).length;
@@ -79,7 +81,7 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
     nodeFiltersBool,
     catFilterBool,
     filterState.searchBar
-  ]); // eslint-disable-line react-hooks/exhaustive-deps
+  ]);
 
   return (
     <div>

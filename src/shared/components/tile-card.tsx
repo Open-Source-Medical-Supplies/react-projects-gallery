@@ -2,18 +2,20 @@ import React from 'react';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 
-/**
- * @param {string} header 
- * @param {string} imageURL 
- * @Optional
- * @param {string}    subHeader     - undefined
- * @param {function}  action        - undefined - button's action, no button shows if omited
- * @param {boolean}   actionOnCard  - false     - if the action should be a button or the card itself. Cannot be used w/ icon
- * @param {string}    className     - ' '
- * @param {boolean}   icon          - true
- * @param {string}    buttonIcon    - 'eye'
- */
-const TileCard = ({header, imageURL, subHeader, action, actionOnCard, className = '', icon = true, buttonIcon='eye'}) => {
+const TileCard = (
+  {
+    header, imageURL, subHeader, action, actionOnCard, className = '', icon = true, buttonIcon='eye'
+  } : {
+    header: string;
+    imageURL: string;
+    subHeader?: string;
+    action?: Function;
+    actionOnCard?: boolean;
+    className?: string;
+    icon?: boolean;
+    buttonIcon?: string;
+  }
+) => {
   const headerImage = (
     typeof imageURL !== 'string' ?
       <div className='center-flex card-header__no-image'>No image</div> :
@@ -25,20 +27,19 @@ const TileCard = ({header, imageURL, subHeader, action, actionOnCard, className 
       <span style={{display: 'flex', justifyContent: 'flex-end'}}>
         {
           icon ?
-          <Button onClick={() => action()} label='View' icon={'pi pi-' + buttonIcon} iconPos='right' className="p-button-raised p-button-rounded" /> :
-          <Button onClick={() => action()} label='View' className="p-button-raised p-button-rounded" />
+          <Button onClick={(e) => action(e)} label='View' icon={'pi pi-' + buttonIcon} iconPos='right' className="p-button-raised p-button-rounded" /> :
+          <Button onClick={(e) => action(e)} label='View' className="p-button-raised p-button-rounded" />
         }
       </span> : null
   );
 
-  const ActionCard = () => (
-    <button className={className + ' tile-card button-no-style'} onClick={() => action()}>
+  const ActionCard = () => action ? 
+    <button className={className + ' tile-card button-no-style'} onClick={(e) => action(e)}>
       <Card header={headerImage}>
         <div className='tile-card__header clamp-1'> {header} </div>
         { subHeader ? <div className='tile-card__sub-header clamp-1'> {subHeader} </div> : null }
       </Card>
-    </button>
-  );
+    </button> : null;
 
   const DefaultCard = () => (
     <Card header={headerImage} footer={footer} className={className + ' tile-card'}>
