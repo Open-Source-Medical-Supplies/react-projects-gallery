@@ -17,8 +17,7 @@ const CategoriesList = (
     categories: {}[]
   }
 ) => {
-  const [toggleState, baseSetToggleState] = useState<{[k: string]: boolean}>({});
-  const setToggleState = (props: {}) => baseSetToggleState({...toggleState, ...props});
+  const [toggleState, setToggleState] = useState<{[k: string]: boolean}>({});
 
   categories = categories.map((c: any) => MAPPER.CategoryToJSON(c));
 
@@ -35,37 +34,28 @@ const CategoriesList = (
   
   const handleClick = (e: MouseEvent, k: string) => {
     const isMulti = e.altKey || e.ctrlKey || e.metaKey || e.shiftKey;
-    const previous = Object.assign({}, categoriesFilters);
+    const previousState = Object.assign({}, categoriesFilters);
 
-    /* 3 scenarios
-      1- select a tile + no tiles selected      ( * = true )
-      2- select the same tile                   ( * = !* )
-      3- select a tile + another tile selected  ( * = true, ** = false)
-    */
-debugger
-    if (empty(toggleState)) {
-      // add to selection / set toggle
-      categoriesFilters[k] = true;
-      setToggleState({[k]: true});
-    } else if (toggleState[k]) {
-      delete categoriesFilters[k];
-      setToggleState({});
-    }
-
-    // if toggled,
     if (categoriesFilters[k] && toggleState[k]) {
-      // remove from selection / remove toggle
+      // toggled = true
       delete categoriesFilters[k];
-      setToggleState({[k]: false});
-    } else {
+      delete toggleState[k]
+      setToggleState(toggleState);
+    } else if (isMulti) {
       // add to selection / set toggle
+      categoriesFilters[k] = true;
+      setToggleState({...toggleState, [k]: true});
+    } else {
+      // delete all except clicked
+      categoriesFilters = {};
       categoriesFilters[k] = true;
       setToggleState({[k]: true});
     }
+
     setFilterState({
       categoriesFilters,
       previousFilters: {
-        categoriesFilters: previous
+        categoriesFilters: previousState
       }
     });
   };

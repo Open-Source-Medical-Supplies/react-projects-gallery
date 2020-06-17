@@ -25,6 +25,29 @@ export const allEmpty = (o: any): boolean => {
 
 export const allNotEmpty = (o: {}): boolean => !allEmpty(o);
 
+export const noFalsePositives = (objects: {[k: string]: {[k: string]: any}} | {[k: string]: boolean}, invert = false) => {
+  let check = invert ? true : false;
+  for (const k in objects) {
+    const o = objects[k]; // Object.keys(bool) => []
+
+    if (typeof o === 'boolean') {
+      if (o) {
+        check = invert ? false : true;
+        console.log('h')
+        return check;
+      }
+    } else {
+      for (const j in o) {
+        if (o[j]) {
+          check = invert ? false : true;
+          return check;
+        }
+      }
+    }
+  }
+  return check;
+}
+
 export const createUUID = () => Math.round(Math.random() * 10000);
 
 export type ProjectJSON = ReturnType<typeof MAPPER.ProjectToJSON>;
