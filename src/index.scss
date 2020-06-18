@@ -33,6 +33,7 @@
     &__header {
       font-size: $header;
       font-weight: $headerWeight;
+      text-align: center;
     }
     
     &__sub-header {
@@ -46,8 +47,11 @@
   @include tileCardFonts();
 }
 
-.fullcard-carousel-cards {
+div.fullcard-carousel-cards {
   @include tileCardFonts(12px);
+
+  margin: 0 0.5rem;
+  box-shadow: none;
 }
 
 .centered-image {
