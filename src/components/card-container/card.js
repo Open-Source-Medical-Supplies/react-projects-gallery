@@ -16,8 +16,8 @@ const ProjectCard = ({data, setCard, selectedCard}) =>{
     "card-selected": !!selectedName && selectedName === name,
   });
   const sizing = classNames({
-    'p-col-4': !selectedName,
-    'p-col-6': !!selectedName
+    'p-col-3': !selectedName,   // default
+    'p-col-6': !!selectedName   // a card is selected
   })
   return (
     <div key={name} className={sizing}>
