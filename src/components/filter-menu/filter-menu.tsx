@@ -6,8 +6,11 @@ import { filterBy } from './filter-menu.utilities';
 import { SearchBar } from './search-bar';
 import { FilterState } from './filter-menu.interface';
 import ClearFilters from './clear-filers';
+import { CategoryComparator, createUUID } from '../../shared/utilities';
 
 /* eslint-disable react-hooks/exhaustive-deps */
+
+const catCompare = new CategoryComparator();
 
 export type SetFilterFn = (props: Partial<FilterState>) => void;
 
@@ -64,7 +67,12 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
   }, []);
 
   const nodeFiltersBool = Object.keys(filterState.nodeFilters).length;
-  const catFilterBool = Object.keys(filterState.categoriesFilters).length;
+  const catFilterBool = catCompare.compareKeys(
+    filterState.categoriesFilters, filterState.previousFilters.categoriesFilters || {}
+  ) ? createUUID() : false;
+  console.log(filterState.categoriesFilters)
+  console.log(filterState.previousFilters.categoriesFilters)
+  console.log(catFilterBool)
 
   // filter-changes
   useEffect(() => {
@@ -78,8 +86,8 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
       setFilterState({isFiltering: _records.length > filteredRecords.length});
     }
   }, [
-    nodeFiltersBool,
     catFilterBool,
+    nodeFiltersBool,
     filterState.searchBar
   ]);
 

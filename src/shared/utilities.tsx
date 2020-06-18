@@ -25,7 +25,35 @@ export const allEmpty = (o: any): boolean => {
 
 export const allNotEmpty = (o: {}): boolean => !allEmpty(o);
 
-export const noFalsePositives = (objects: {[k: string]: {[k: string]: any}} | {[k: string]: boolean}, invert = false) => {
+export class CategoryComparator {
+  state: any;
+  previous: any;
+
+  compareKeys (state: {}, previous: {}): boolean {
+    if (state === this.state && previous === this.previous) {
+      return false;
+    }
+    this.state = state;
+    this.previous = previous;
+  // false is previous is empty
+  // true if key lengths are different
+  // true if key lengths are equal but keys are different
+  // false if the 'same' object (mem pointers not withstanding)
+  const a = Object.keys(state);
+  const b = Object.keys(previous);
+  if (a < b || a > b) {
+    return true;
+  }
+  for(const k in a) {
+    if (!b[k]) {
+       return true;
+    }
+  }
+  return false;
+}
+}
+
+export const noFalsePositives = (objects: {[k: string]: {[k: string]: any}} | {[k: string]: boolean}, invert = false): boolean => {
   let check = invert ? true : false;
   for (const k in objects) {
     const o = objects[k]; // Object.keys(bool) => []
