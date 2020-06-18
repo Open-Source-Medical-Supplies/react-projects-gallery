@@ -55,7 +55,6 @@ const ImageCarousel = ({ links, formatter, cardClassName }) => {
   const cardTemplate = (data) => {
     const {header, imageURL, externalLink, subHeader} = formatter(data);
 
-    console.log(externalLink)
     return externalLink ?
       <ActionCard
         header={header}

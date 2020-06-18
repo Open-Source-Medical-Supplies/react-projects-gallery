@@ -35,7 +35,7 @@ export class CategoryComparator {
     }
     this.state = state;
     this.previous = previous;
-  // false is previous is empty
+  // false if previous is empty
   // true if key lengths are different
   // true if key lengths are equal but keys are different
   // false if the 'same' object (mem pointers not withstanding)
@@ -61,7 +61,6 @@ export const noFalsePositives = (objects: {[k: string]: {[k: string]: any}} | {[
     if (typeof o === 'boolean') {
       if (o) {
         check = invert ? false : true;
-        console.log('h')
         return check;
       }
     } else {
