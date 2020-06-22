@@ -7,7 +7,7 @@ import CardContainer from './components/card-container/card-container';
 import DetailWindow from './components/detail-window/detail-window';
 import FullCard from "./components/detail-window/full-card";
 import FilterMenu from "./components/filter-menu/filter-menu";
-import { parseProjects, parseBoM } from "./service/app.service";
+import { fetchData } from "./service/app.service";
 import './shared/css/_prime.scss';
 import { empty } from "./shared/utilities";
 
@@ -36,16 +36,7 @@ const App = () => {
   const hide = () => setState({selectedCard: {}, visible: false});
 
   useEffect(() => {
-    (async function fetch() {
-      Promise.all([
-        parseProjects(),
-        parseBoM()
-      ]).then(
-        (res) => {
-          setState({ ...res[0], ...res[1] })
-        }
-      );
-    })();
+    fetchData(setState)
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {

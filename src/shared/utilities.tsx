@@ -83,26 +83,28 @@ export type CategoryJSON = ReturnType<typeof MAPPER.CategoryToJSON>;
 export const MAPPER = {
   ProjectToJSON: function (project: any) {
     if (!project) return {};
-    const name = project['Full Project Name'];
-    const displayName = project['Display Name'] ? project['Display Name'][0] : '';  // b/c it's a lookup field in AT?
-    const reviewedBy = project['Reviewed By'] ? project['Reviewed By'] : '';
-    const medicalStatus = project['Medical Status'] ? project['Medical Status'][0] : '';
-    const imageURL = project.HeaderImageURL !== '#ERROR!' ? project.HeaderImageURL : '';
-    const description = project['Description'];
-    const externalLink = project['Link'];
-    const hyperLinkText = project['Hyperlink Text'];
-    const attributionOrg = project['Attribution Organization'];
-    const creator = project['Creator'] || '';
-    const osmsNotes = project['OSMS Notes'] || '';
-    const useCase = project['Use Case'] || '';
-    const audience = project['Audience'] || [];
-    const generalSkillsTools = project['General Skills/Tools'] || [];
-    const difficulty = project['Difficulty'] || [];
-    const projectType = project['Project Type'] || [];
+    const baseID              = project['Base ID'];
+    const name                = project['Full Project Name'];
+    const displayName         = project['Display Name'] ? project['Display Name'][0] : '';  // b/c it's a lookup field in AT?
+    const reviewedBy          = project['Reviewed By'] ? project['Reviewed By'] : '';
+    const medicalStatus       = project['Medical Status'] ? project['Medical Status'][0] : '';
+    const imageURL            = project.HeaderImageURL !== '#ERROR!' ? project.HeaderImageURL : '';
+    const description         = project['Description'];
+    const externalLink        = project['Link'];
+    const hyperLinkText       = project['Hyperlink Text'];
+    const attributionOrg      = project['Attribution Organization'];
+    const creator             = project['Creator'] || '';
+    const osmsNotes           = project['OSMS Notes'] || '';
+    const useCase             = project['Use Case'] || '';
+    const audience            = project['Audience'] || [];
+    const generalSkillsTools  = project['General Skills/Tools'] || [];
+    const difficulty          = project['Difficulty'] || [];
+    const projectType         = project['Project Type'] || [];
   
     return {
       attributionOrg,
       audience,
+      baseID,
       creator,
       description,
       difficulty,

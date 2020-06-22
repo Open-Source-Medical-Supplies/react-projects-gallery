@@ -67,7 +67,7 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
   }, []);
 
   const nodeFiltersBool = Object.keys(filterState.nodeFilters).length;
-  console.log(filterState.nodeFilters);
+  
   const catFilterBool = catCompare.compareKeys(
     filterState.categoriesFilters, filterState.previousFilters.categoriesFilters || {}
   ) ? createUUID() : false;

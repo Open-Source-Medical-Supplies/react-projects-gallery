@@ -1,4 +1,5 @@
 import { AirtableCalls, AirtableHelpers } from "./airtable";
+import { notEmpty } from "../shared/utilities";
 
 /**
  * @returns {Promise<{
@@ -32,4 +33,31 @@ const bomParse = (materials) => {
     acc[matID] = mat; // this (mat) could be sorted, but materials should be coming in in ID order already
     return acc;
   }, {});
+}
+
+const getParam = () => window.location && window.location.search ?
+    decodeURI(window.location.search.split('project=')[1]) :
+    undefined;
+
+export const fetchData = async(setState) => {
+  const param = getParam();
+
+  Promise.all([
+    parseProjects(),
+    parseBoM()
+  ]).then(
+    (res) => {
+      if(param) {
+        const selectedCard = res[0]._records.find(r => r['Base ID'] === param) || {};
+        setState({
+          ...res[0],
+          ...res[1],
+          selectedCard,
+          visible: notEmpty(selectedCard),
+        })
+      } else {
+        setState({ ...res[0], ...res[1] })
+      }
+    }
+  );
 }

@@ -37,7 +37,7 @@ const FullCard = ({selectedCard, materials}) => {
     </span>
   ) : null;
 
-  const linkOut = '/category-library?category=' + encodeURI(displayName);
+  const linkOut = window.location.pathname + '?category=' + encodeURI(displayName);
 
   return (
     <div className="full-card">
