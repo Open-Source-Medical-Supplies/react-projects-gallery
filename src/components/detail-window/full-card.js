@@ -33,7 +33,7 @@ const FullCard = ({selectedCard, materials}) => {
         label='Make it!'
         icon='pi pi-external-link'
         iconPos='right'
-        className="p-button-raised p-button-rounded" />
+        className="p-button-raised p-button-rounded margin-z-auto" />
     </span>
   ) : null;
 
