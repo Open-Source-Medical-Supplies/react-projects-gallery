@@ -1,3 +1,6 @@
+# DEPRECATED
+## Merged into https://github.com/Open-Source-Medical-Supplies/osms-libraries
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
