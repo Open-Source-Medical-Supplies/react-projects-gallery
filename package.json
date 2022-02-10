@@ -13,7 +13,7 @@
     "airtable": "^0.8.1",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "primeflex": "^1.1.0",
     "primeicons": "^3.0.0-rc.1",
     "primereact": "^4.2.1",
